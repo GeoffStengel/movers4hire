@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Movers4Hire | Eugene, Oregon Moving Company</title>
+  <style>
+    :root {
+      --bg: #081120;
+      --bg-soft: #0f1b2d;
+      --card: rgba(12, 24, 40, 0.72);
+      --line: rgba(255, 255, 255, 0.1);
+      --text: #eef4ff;
+      --muted: #9eb0c8;
+      --brand: #4fd1c5;
+      --brand-2: #7c5cff;
+      --accent: #ffc857;
+      --danger: #ff7b7b;
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+      --radius: 24px;
+      --radius-sm: 16px;
+      --max: 1200px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 20% 20%, rgba(124, 92, 255, 0.2), transparent 28%),
+        radial-gradient(circle at 80% 10%, rgba(79, 209, 197, 0.18), transparent 24%),
+        radial-gradient(circle at 50% 85%, rgba(255, 200, 87, 0.14), transparent 22%),
+        linear-gradient(180deg, #06111f 0%, #071420 45%, #081120 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: auto;
+      width: 520px;
+      height: 520px;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.35;
+      animation: drift 16s ease-in-out infinite alternate;
+    }
+
+    body::before {
+      top: -120px;
+      left: -140px;
+      background: rgba(124, 92, 255, 0.35);
+    }
+
+    body::after {
+      right: -120px;
+      bottom: -150px;
+      background: rgba(79, 209, 197, 0.22);
+      animation-delay: -4s;
+    }
+
+    @keyframes drift {
+      from { transform: translate3d(0, 0, 0) scale(1); }
+      to { transform: translate3d(40px, -25px, 0) scale(1.08); }
+    }
+
+    .grid-lines {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: radial-gradient(circle at center, black 20%, transparent 85%);
+      z-index: 0;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+    }
+
+    .container {
+      width: min(calc(100% - 2rem), var(--max));
+      margin: 0 auto;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(5, 11, 20, 0.55);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      box-shadow: 0 14px 30px rgba(79, 209, 197, 0.2);
+      font-size: 1.05rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.96rem;
+      transition: 180ms ease;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 0.95rem 1.3rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(0,0,0,0.22);
+    }
+
+    .btn-primary {
+      color: #07121f;
+      background: linear-gradient(135deg, var(--brand), #9af3ec);
+    }
+
+    .btn-secondary {
+      color: var(--text);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .hero {
+      padding: 4.5rem 0 2.5rem;
+      min-height: 88vh;
+      display: grid;
+      align-items: center;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.55rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--brand);
+      background: rgba(255,255,255,0.04);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 6vw, 5.6rem);
+      line-height: 0.96;
+      margin: 0 0 1rem;
+      letter-spacing: -0.04em;
+      max-width: 10ch;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #ffffff, var(--brand), #bcaeff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.7;
+      max-width: 58ch;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-actions,
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      align-items: center;
+    }
+
+    .hero-stats {
+      margin-top: 1.4rem;
+      gap: 1rem;
+    }
+
+    .stat-chip {
+      padding: 0.8rem 1rem;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      min-width: 140px;
+    }
+
+    .stat-chip strong {
+      display: block;
+      font-size: 1.2rem;
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 560px;
+      display: grid;
+      place-items: center;
+    }
+
+    .orbital-ring,
+    .truck-card,
+    .floating-card {
+      position: absolute;
+      border: 1px solid rgba(255,255,255,0.09);
+      background: rgba(8, 20, 32, 0.62);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+    }
+
+    .orbital-ring {
+      width: 460px;
+      height: 460px;
+      border-radius: 50%;
+      border-style: dashed;
+      animation: spin 30s linear infinite;
+      opacity: 0.35;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .truck-card {
+      width: min(100%, 520px);
+      border-radius: 32px;
+      padding: 1.4rem;
+      overflow: hidden;
+      transform: perspective(1200px) rotateY(-7deg) rotateX(4deg);
+    }
+
+    .truck-screen {
+      position: relative;
+      background: linear-gradient(180deg, rgba(124,92,255,0.2), rgba(79,209,197,0.08));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 1.2rem;
+      min-height: 360px;
+      overflow: hidden;
+    }
+
+    .truck-screen::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 70% 10%, rgba(79, 209, 197, 0.18), transparent 32%);
+      pointer-events: none;
+    }
+
+    .truck-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .badge {
+      padding: 0.45rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      color: var(--brand);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.83rem;
+    }
+
+    .truck-illustration {
+      position: relative;
+      height: 180px;
+      margin: 1rem 0 1.4rem;
+    }
+
+    .road {
+      position: absolute;
+      bottom: 28px;
+      left: 0;
+      right: 0;
+      height: 12px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+      overflow: hidden;
+    }
+
+    .road::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(90deg, transparent 0 22px, rgba(255,255,255,0.35) 22px 40px);
+      animation: roadMove 1.4s linear infinite;
+    }
+
+    @keyframes roadMove {
+      from { transform: translateX(0); }
+      to { transform: translateX(-62px); }
+    }
+
+    .truck {
+      position: absolute;
+      left: 12%;
+      bottom: 36px;
+      width: 240px;
+      height: 92px;
+      animation: truckBounce 3s ease-in-out infinite;
+    }
+
+    @keyframes truckBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .cab, .box, .wheel, .window, .headlight, .door {
+      position: absolute;
+    }
+
+    .box {
+      width: 140px;
+      height: 68px;
+      left: 0;
+      top: 10px;
+      border-radius: 18px 10px 12px 12px;
+      background: linear-gradient(135deg, var(--brand-2), #9d87ff);
+      box-shadow: inset 0 -8px 20px rgba(255,255,255,0.08);
+    }
+
+    .cab {
+      width: 90px;
+      height: 52px;
+      right: 0;
+      bottom: 14px;
+      border-radius: 16px 14px 12px 8px;
+      background: linear-gradient(135deg, #f8fbff, #d7e5ff);
+    }
+
+    .door {
+      width: 28px;
+      height: 30px;
+      right: 25px;
+      top: 10px;
+      border-radius: 8px;
+      border: 2px solid rgba(8,17,32,0.14);
+    }
+
+    .window {
+      width: 34px;
+      height: 18px;
+      right: 40px;
+      top: 9px;
+      border-radius: 6px 8px 4px 4px;
+      background: rgba(79,209,197,0.55);
+    }
+
+    .headlight {
+      width: 10px;
+      height: 10px;
+      right: -3px;
+      bottom: 11px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 16px rgba(255,200,87,0.7);
+    }
+
+    .wheel {
+      width: 38px;
+      height: 38px;
+      bottom: 0;
+      border-radius: 50%;
+      background: #081120;
+      border: 7px solid #c7d6ef;
+      animation: wheelSpin 1s linear infinite;
+    }
+
+    .wheel::before {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    .wheel.one { left: 28px; }
+    .wheel.two { right: 14px; }
+
+    @keyframes wheelSpin {
+      from { transform: rotate(0); }
+      to { transform: rotate(360deg); }
+    }
+
+    .route-bars {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .route-row {
+      display: grid;
+      grid-template-columns: 68px 1fr 70px;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .bar {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bar > span {
+      position: absolute;
+      inset: 0;
+      width: var(--w, 50%);
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--brand), var(--brand-2));
+    }
+
+    .floating-card {
+      padding: 1rem 1.1rem;
+      border-radius: 20px;
+      max-width: 230px;
+      animation: floaty 4.8s ease-in-out infinite;
+    }
+
+    .floating-card h4,
+    .floating-card p {
+      margin: 0;
+    }
+
+    .floating-card p {
+      color: var(--muted);
+      margin-top: 0.4rem;
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .floating-card.one {
+      top: 8%;
+      left: -4%;
+    }
+
+    .floating-card.two {
+      right: -3%;
+      bottom: 14%;
+      animation-delay: -1.5s;
+    }
+
+    @keyframes floaty {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+    }
+
+    section {
+      padding: 2.2rem 0;
+    }
+
+    .section-head {
+      margin-bottom: 1.4rem;
+    }
+
+    .section-head h2 {
+      margin: 0 0 0.6rem;
+      font-size: clamp(2rem, 4vw, 3rem);
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 60ch;
+      line-height: 1.7;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .feature-card {
+      min-height: 220px;
+      transition: transform 220ms ease, border-color 220ms ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(79,209,197,0.35);
+    }
+
+    .icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, rgba(79,209,197,0.18), rgba(124,92,255,0.16));
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 1.3rem;
+    }
+
+    .feature-card h3,
+    .estimate-panel h3,
+    .summary-card h3,
+    .contact-card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.15rem;
+    }
+
+    .feature-card p,
+    .contact-card p,
+    .estimate-panel p,
+    .summary-card p,
+    .fee-note,
+    .mini-note {
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .estimator-wrap {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .estimate-panel,
+    .summary-card,
+    .contact-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 1.3rem;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .field,
+    .toggle-group,
+    .check-grid {
+      margin-top: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.92rem;
+      color: #dfe7f7;
+    }
+
+    input,
+    select {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 0.95rem 1rem;
+      font: inherit;
+      outline: none;
+      transition: border-color 180ms ease, transform 180ms ease;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: rgba(79,209,197,0.55);
+      transform: translateY(-1px);
+    }
+
+    select option {
+      background: #0c1828;
+    }
+
+    .toggle-row,
+    .check-option,
+    .summary-row,
+    .pricing-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .toggle-row,
+    .check-option {
+      padding: 0.85rem 1rem;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      margin-bottom: 0.8rem;
+    }
+
+    .check-option {
+      justify-content: flex-start;
+      gap: 0.85rem;
+    }
+
+    .check-option input,
+    .toggle-row input {
+      width: auto;
+      transform: scale(1.15);
+      accent-color: var(--brand);
+    }
+
+    .check-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.8rem;
+    }
+
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-top: 1.2rem;
+    }
+
+    .summary-card {
+      position: sticky;
+      top: 92px;
+    }
+
+    .price-total {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      margin: 0.6rem 0 1.2rem;
+    }
+
+    .price-total strong {
+      font-size: clamp(2.4rem, 5vw, 3.7rem);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .pulse-line {
+      position: relative;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+      margin: 1rem 0 1.2rem;
+    }
+
+    .pulse-line span {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, var(--brand), var(--brand-2), var(--accent));
+      width: 55%;
+      animation: pulseTrack 2.8s ease-in-out infinite alternate;
+      border-radius: inherit;
+    }
+
+    @keyframes pulseTrack {
+      from { transform: translateX(-8%); }
+      to { transform: translateX(68%); }
+    }
+
+    .summary-breakdown,
+    .pricing-grid {
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .summary-row,
+    .pricing-row {
+      padding: 0.82rem 0.95rem;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      font-size: 0.95rem;
+    }
+
+    .summary-row span:last-child,
+    .pricing-row span:last-child {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .summary-row.total-row {
+      border-color: rgba(79,209,197,0.35);
+      background: linear-gradient(135deg, rgba(79,209,197,0.12), rgba(124,92,255,0.1));
+    }
+
+    .pricing-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .pricing-row {
+      min-height: 110px;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 650ms ease, transform 650ms ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 1rem;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+
+    .contact-item {
+      padding: 0.95rem 1rem;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .contact-item strong {
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .footer {
+      padding: 2rem 0 3rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .tiny {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 1050px) {
+      .hero-grid,
+      .estimator-wrap,
+      .contact-grid,
+      .pricing-grid,
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-visual {
+        min-height: 460px;
+      }
+
+      .summary-card {
+        position: static;
+      }
+
+      .floating-card.one { left: 0; }
+      .floating-card.two { right: 0; }
+    }
+
+    @media (max-width: 700px) {
+      .hero {
+        padding-top: 3.5rem;
+      }
+
+      .nav-inner {
+        align-items: flex-start;
+        gap: 1rem;
+        flex-direction: column;
+      }
+
+      .form-grid,
+      .check-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .truck-card {
+        transform: none;
+      }
+
+      .hero-visual {
+        min-height: 400px;
+      }
+
+      .orbital-ring {
+        width: 310px;
+        height: 310px;
+      }
+
+      .truck {
+        left: 4%;
+        transform: scale(0.88);
+        transform-origin: left bottom;
+      }
+
+      .floating-card {
+        max-width: 180px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-lines"></div>
+
+  <div class="page">
+    <nav class="nav">
+      <div class="container nav-inner">
+        <div class="brand">
+          <div class="brand-badge">📦</div>
+          <div>
+            <div>Movers4Hire</div>
+            <div class="tiny">Eugene, Oregon</div>
+          </div>
+        </div>
+
+        <div class="nav-links">
+          <a href="#services">Services</a>
+          <a href="#estimate">Estimator</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#contact">Contact</a>
+          <a class="btn btn-primary" href="#estimate">Get Estimate</a>
+        </div>
+      </div>
+    </nav>
+
+    <header class="hero container">
+      <div class="hero-grid">
+        <div class="reveal visible">
+          <div class="eyebrow">⚡ Fast quotes • Smooth moves • No boring websites allowed</div>
+          <h1>Moving in <span class="gradient-text">Eugene</span> just got ridiculously easier.</h1>
+          <p>
+            Movers4Hire delivers local and regional moves with transparent pricing, pro crews, and a live estimator that helps customers understand labor, mileage, truck fees, stairs, packing, and more—before they even call.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#estimate">Estimate My Move</a>
+            <a class="btn btn-secondary" href="#services">See Services</a>
+          </div>
+
+          <div class="hero-stats">
+            <div class="stat-chip">
+              <strong>2–4 Movers</strong>
+              <span class="tiny">Flexible crew sizing</span>
+            </div>
+            <div class="stat-chip">
+              <strong>Live Quote Tool</strong>
+              <span class="tiny">Breakdown updates instantly</span>
+            </div>
+            <div class="stat-chip">
+              <strong>Local + Long Distance</strong>
+              <span class="tiny">From apartments to full homes</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual reveal visible">
+          <div class="orbital-ring"></div>
+
+          <div class="floating-card one">
+            <h4>Smart move planning</h4>
+            <p>Auto-adjusts for distance, hourly labor, supplies, and common add-ons.</p>
+          </div>
+
+          <div class="truck-card">
+            <div class="truck-screen">
+              <div class="truck-meta">
+                <div>
+                  <strong>Movers4Hire Dispatch</strong>
+                  <div class="tiny">Eugene HQ • Real-time estimate UI</div>
+                </div>
+                <div class="badge">Booked 24/7</div>
+              </div>
+
+              <div class="truck-illustration" aria-hidden="true">
+                <div class="truck">
+                  <div class="box"></div>
+                  <div class="cab"></div>
+                  <div class="door"></div>
+                  <div class="window"></div>
+                  <div class="headlight"></div>
+                  <div class="wheel one"></div>
+                  <div class="wheel two"></div>
+                </div>
+                <div class="road"></div>
+              </div>
+
+              <div class="route-bars">
+                <div class="route-row">
+                  <span>Studio</span>
+                  <div class="bar" style="--w: 32%"><span></span></div>
+                  <strong>$249+</strong>
+                </div>
+                <div class="route-row">
+                  <span>2 Bed</span>
+                  <div class="bar" style="--w: 58%"><span></span></div>
+                  <strong>$489+</strong>
+                </div>
+                <div class="route-row">
+                  <span>4 Bed</span>
+                  <div class="bar" style="--w: 82%"><span></span></div>
+                  <strong>$899+</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="floating-card two">
+            <h4>Transparent pricing vibes</h4>
+            <p>No mystery math. Customers see each fee line-by-line while they build the quote.</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section id="services" class="container reveal">
+      <div class="section-head">
+        <h2>Built to impress. Built to convert.</h2>
+        <p>
+          This landing experience mixes motion, glassmorphism, punchy copy, and an interactive pricing tool so people landing on the site immediately know Movers4Hire means business.
+        </p>
+      </div>
+
+      <div class="features">
+        <article class="card feature-card">
+          <div class="icon">🏠</div>
+          <h3>Residential Moves</h3>
+          <p>Homes, apartments, condos, and townhomes. Customers can estimate by property size, access difficulty, and crew count.</p>
+        </article>
+
+        <article class="card feature-card">
+          <div class="icon">📦</div>
+          <h3>Packing & Supplies</h3>
+          <p>Add boxes, stretch wrap, mattress bags, and packing labor for a more realistic quote without the guesswork circus.</p>
+        </article>
+
+        <article class="card feature-card">
+          <div class="icon">🚚</div>
+          <h3>Labor + Truck + Mileage</h3>
+          <p>Hourly labor, flat truck fee, mileage charge, travel fee, and special handling options all roll into one polished estimate.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="estimate" class="container reveal">
+      <div class="section-head">
+        <h2>Instant move estimator</h2>
+        <p>
+          Customers can play with the numbers and see a live total. Great for lead generation, expectation-setting, and making your competitors look a little... outdated.
+        </p>
+      </div>
+
+      <div class="estimator-wrap">
+        <div class="estimate-panel">
+          <h3>Customize the move</h3>
+          <p>Everything updates live. These sample rates are easy to tweak later to match your actual pricing.</p>
+
+          <div class="form-grid">
+            <div class="field">
+              <label for="moveSize">Move size</label>
+              <select id="moveSize">
+                <option value="studio">Studio / Small 1 Bed</option>
+                <option value="onebed">1–2 Bedroom</option>
+                <option value="threebed">3 Bedroom</option>
+                <option value="fourbed">4+ Bedroom / Large Home</option>
+                <option value="office">Small Office / Commercial</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="movers">Number of movers</label>
+              <select id="movers">
+                <option value="2">2 movers</option>
+                <option value="3" selected>3 movers</option>
+                <option value="4">4 movers</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="hours">Estimated labor hours</label>
+              <input id="hours" type="number" min="2" max="24" step="0.5" value="4" />
+            </div>
+
+            <div class="field">
+              <label for="miles">Mileage between locations</label>
+              <input id="miles" type="number" min="0" max="500" step="1" value="12" />
+            </div>
+
+            <div class="field">
+              <label for="truckFee">Truck fee</label>
+              <input id="truckFee" type="number" min="0" max="1000" step="5" value="95" />
+            </div>
+
+            <div class="field">
+              <label for="travelFee">Travel / dispatch fee</label>
+              <input id="travelFee" type="number" min="0" max="500" step="5" value="45" />
+            </div>
+          </div>
+
+          <div class="toggle-group">
+            <div class="toggle-row">
+              <div>
+                <strong>Need packing help?</strong>
+                <div class="tiny">Adds packing labor + packing materials</div>
+              </div>
+              <input id="packingHelp" type="checkbox" />
+            </div>
+
+            <div class="toggle-row">
+              <div>
+                <strong>Heavy / specialty items?</strong>
+                <div class="tiny">For safes, pianos, oversized furniture, gym equipment</div>
+              </div>
+              <input id="specialty" type="checkbox" />
+            </div>
+          </div>
+
+          <div class="check-grid">
+            <label class="check-option">
+              <input class="addon" type="checkbox" value="35" data-name="Stairs fee" />
+              <span>Stairs fee</span>
+            </label>
+
+            <label class="check-option">
+              <input class="addon" type="checkbox" value="50" data-name="Long carry fee" />
+              <span>Long carry fee</span>
+            </label>
+
+            <label class="check-option">
+              <input class="addon" type="checkbox" value="65" data-name="Furniture assembly" />
+              <span>Furniture assembly</span>
+            </label>
+
+            <label class="check-option">
+              <input class="addon" type="checkbox" value="40" data-name="Appliance handling" />
+              <span>Appliance handling</span>
+            </label>
+
+            <label class="check-option">
+              <input class="addon" type="checkbox" value="25" data-name="Wardrobe boxes" />
+              <span>Wardrobe boxes</span>
+            </label>
+
+            <label class="check-option">
+              <input class="addon" type="checkbox" value="80" data-name="Last-minute booking" />
+              <span>Last-minute booking</span>
+            </label>
+          </div>
+
+          <div class="action-row">
+            <button class="btn btn-primary" id="recalculateBtn">Recalculate</button>
+            <button class="btn btn-secondary" id="resetBtn" type="button">Reset</button>
+          </div>
+
+          <p class="fee-note tiny">
+            Heads-up: this is an estimate UI for the website, not a legal final quote. You can later hook this to a form, email capture, CRM, or online booking flow.
+          </p>
+        </div>
+
+        <aside class="summary-card">
+          <div class="badge">Live Estimate</div>
+          <h3>Your projected move total</h3>
+          <p>Numbers refresh instantly as selections change. Fancy, useful, and very conversion-friendly.</p>
+
+          <div class="price-total">
+            <span class="tiny">Estimated total</span>
+            <strong id="estimateTotal">$0</strong>
+          </div>
+
+          <div class="pulse-line"><span></span></div>
+
+          <div class="summary-breakdown" id="breakdown"></div>
+
+          <div class="summary-row total-row" style="margin-top: 0.9rem;">
+            <span>Grand total</span>
+            <span id="grandTotalRow">$0</span>
+          </div>
+
+          <p class="mini-note tiny" id="timeEstimateText" style="margin-top: 1rem;"></p>
+        </aside>
+      </div>
+    </section>
+
+    <section id="pricing" class="container reveal">
+      <div class="section-head">
+        <h2>Pricing logic customers actually understand</h2>
+        <p>
+          This section helps set expectations. It also reinforces trust because transparent pricing hits different when everyone else is still saying “call for quote.”
+        </p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="pricing-row card">
+          <span>Hourly labor</span>
+          <span id="hourlyRateDisplay">$165 / hr</span>
+          <small class="tiny">Based on crew size and move type</small>
+        </div>
+        <div class="pricing-row card">
+          <span>Mileage</span>
+          <span id="mileageRateDisplay">$3.25 / mile</span>
+          <small class="tiny">Useful for local and regional moves</small>
+        </div>
+        <div class="pricing-row card">
+          <span>Packing / special fees</span>
+          <span>$35–$150+</span>
+          <small class="tiny">Optional add-ons for realistic estimates</small>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="container reveal">
+      <div class="contact-grid">
+        <div class="contact-card">
+          <div class="badge">Why this works</div>
+          <h3>Conversion-minded design</h3>
+          <p>
+            Hero animation grabs attention. Estimator keeps people engaged. Clear pricing reduces friction. And the layout gives Movers4Hire a premium, modern brand presence instead of “generic local business template from 2012.”
+          </p>
+
+          <div class="contact-list">
+            <div class="contact-item">
+              <strong>Perfect next steps</strong>
+              Connect the estimator to a quote request form and email the estimate automatically.
+            </div>
+            <div class="contact-item">
+              <strong>Easy content upgrades</strong>
+              Add testimonials, service-area pages, before/after galleries, FAQs, and Google review embeds.
+            </div>
+            <div class="contact-item">
+              <strong>Sales angle</strong>
+              Let users save their quote and schedule a callback. Very chef’s kiss.
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="badge">Movers4Hire</div>
+          <h3>Ready to customize</h3>
+          <p>
+            Swap in the real phone number, service area, pricing, testimonials, and booking form details. The structure is already set up to grow into a full lead-gen website.
+          </p>
+
+          <div class="contact-list">
+            <div class="contact-item">
+              <strong>Phone</strong>
+              (541) 555-0199
+            </div>
+            <div class="contact-item">
+              <strong>Email</strong>
+              hello@movers4hire.com
+            </div>
+            <div class="contact-item">
+              <strong>Service Area</strong>
+              Eugene, Springfield, and surrounding Oregon areas
+            </div>
+          </div>
+
+          <div class="action-row" style="margin-top: 1rem;">
+            <a href="#estimate" class="btn btn-primary">Get My Estimate</a>
+            <a href="#services" class="btn btn-secondary">Explore Features</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer container">
+      <p>© <span id="year"></span> Movers4Hire • Eugene, Oregon • Fast moves, smooth quotes, fewer headaches.</p>
+    </footer>
+  </div>
+
+  <script>
+    const pricingConfig = {
+      baseHourlyByMovers: {
+        2: 120,
+        3: 165,
+        4: 220,
+      },
+      sizeMultipliers: {
+        studio: 1,
+        onebed: 1.1,
+        threebed: 1.22,
+        fourbed: 1.38,
+        office: 1.3,
+      },
+      mileageRate: 3.25,
+      packingLabor: 95,
+      packingSupplies: 45,
+      specialtyFee: 150,
+      minimumHours: {
+        studio: 2.5,
+        onebed: 3,
+        threebed: 5,
+        fourbed: 7,
+        office: 4,
+      }
+    };
+
+    const els = {
+      moveSize: document.getElementById('moveSize'),
+      movers: document.getElementById('movers'),
+      hours: document.getElementById('hours'),
+      miles: document.getElementById('miles'),
+      truckFee: document.getElementById('truckFee'),
+      travelFee: document.getElementById('travelFee'),
+      packingHelp: document.getElementById('packingHelp'),
+      specialty: document.getElementById('specialty'),
+      addons: Array.from(document.querySelectorAll('.addon')),
+      estimateTotal: document.getElementById('estimateTotal'),
+      grandTotalRow: document.getElementById('grandTotalRow'),
+      breakdown: document.getElementById('breakdown'),
+      hourlyRateDisplay: document.getElementById('hourlyRateDisplay'),
+      mileageRateDisplay: document.getElementById('mileageRateDisplay'),
+      timeEstimateText: document.getElementById('timeEstimateText'),
+      recalculateBtn: document.getElementById('recalculateBtn'),
+      resetBtn: document.getElementById('resetBtn'),
+      year: document.getElementById('year'),
+    };
+
+    const currency = (value) =>
+      new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        maximumFractionDigits: 0,
+      }).format(value);
+
+    function getEstimatedHours(size, inputHours) {
+      const min = pricingConfig.minimumHours[size] || 3;
+      return Math.max(Number(inputHours) || min, min);
+    }
+
+    function calculateEstimate() {
+      const moveSize = els.moveSize.value;
+      const movers = Number(els.movers.value);
+      const miles = Math.max(0, Number(els.miles.value) || 0);
+      const truckFee = Math.max(0, Number(els.truckFee.value) || 0);
+      const travelFee = Math.max(0, Number(els.travelFee.value) || 0);
+      const adjustedHours = getEstimatedHours(moveSize, els.hours.value);
+
+      if (Number(els.hours.value) !== adjustedHours) {
+        els.hours.value = adjustedHours;
+      }
+
+      const baseHourly = pricingConfig.baseHourlyByMovers[movers] || 165;
+      const sizeMultiplier = pricingConfig.sizeMultipliers[moveSize] || 1;
+      const hourlyRate = Math.round(baseHourly * sizeMultiplier);
+      const laborCost = hourlyRate * adjustedHours;
+      const mileageCost = miles * pricingConfig.mileageRate;
+
+      const packingCost = els.packingHelp.checked
+        ? pricingConfig.packingLabor + pricingConfig.packingSupplies
+        : 0;
+
+      const specialtyCost = els.specialty.checked ? pricingConfig.specialtyFee : 0;
+
+      const selectedAddons = els.addons
+        .filter((addon) => addon.checked)
+        .map((addon) => ({
+          name: addon.dataset.name,
+          amount: Number(addon.value),
+        }));
+
+      const addonsTotal = selectedAddons.reduce((sum, item) => sum + item.amount, 0);
+      const subtotal = laborCost + mileageCost + truckFee + travelFee + packingCost + specialtyCost + addonsTotal;
+      const estimateTotal = Math.round(subtotal);
+
+      const breakdownItems = [
+        { label: `Labor (${adjustedHours} hrs @ ${currency(hourlyRate)}/hr)`, value: laborCost },
+        { label: `Mileage (${miles} mi @ ${currency(pricingConfig.mileageRate)}/mi)`, value: mileageCost },
+        { label: 'Truck fee', value: truckFee },
+        { label: 'Travel / dispatch', value: travelFee },
+      ];
+
+      if (packingCost) breakdownItems.push({ label: 'Packing service + supplies', value: packingCost });
+      if (specialtyCost) breakdownItems.push({ label: 'Specialty item handling', value: specialtyCost });
+      selectedAddons.forEach((item) => breakdownItems.push({ label: item.name, value: item.amount }));
+
+      els.breakdown.innerHTML = breakdownItems
+        .map((item) => `
+          <div class="summary-row">
+            <span>${item.label}</span>
+            <span>${currency(item.value)}</span>
+          </div>
+        `)
+        .join('');
+
+      els.estimateTotal.textContent = currency(estimateTotal);
+      els.grandTotalRow.textContent = currency(estimateTotal);
+      els.hourlyRateDisplay.textContent = `${currency(hourlyRate)} / hr`;
+      els.mileageRateDisplay.textContent = `${currency(pricingConfig.mileageRate)} / mile`;
+      els.timeEstimateText.textContent = `Suggested minimum for this move type: ${pricingConfig.minimumHours[moveSize]} hours. Crew size selected: ${movers} mover${movers > 1 ? 's' : ''}.`;
+    }
+
+    function resetEstimator() {
+      els.moveSize.value = 'studio';
+      els.movers.value = '3';
+      els.hours.value = '4';
+      els.miles.value = '12';
+      els.truckFee.value = '95';
+      els.travelFee.value = '45';
+      els.packingHelp.checked = false;
+      els.specialty.checked = false;
+      els.addons.forEach((addon) => { addon.checked = false; });
+      calculateEstimate();
+    }
+
+    const observedEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15 });
+
+    observedEls.forEach((el) => observer.observe(el));
+
+    [
+      els.moveSize,
+      els.movers,
+      els.hours,
+      els.miles,
+      els.truckFee,
+      els.travelFee,
+      els.packingHelp,
+      els.specialty,
+      ...els.addons,
+    ].forEach((el) => {
+      el.addEventListener('input', calculateEstimate);
+      el.addEventListener('change', calculateEstimate);
+    });
+
+    els.recalculateBtn.addEventListener('click', calculateEstimate);
+    els.resetBtn.addEventListener('click', resetEstimator);
+    els.year.textContent = new Date().getFullYear();
+
+    calculateEstimate();
+  </script>
+</body>
+</html>
