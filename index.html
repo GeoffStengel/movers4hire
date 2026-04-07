@@ -3,967 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/styles.css">
   <title>Movers4Hire | Eugene, Oregon Moving Company</title>
-  <style>
-    :root {
-      --bg: #081120;
-      --bg-soft: #0f1b2d;
-      --card: rgba(12, 24, 40, 0.72);
-      --line: rgba(255, 255, 255, 0.1);
-      --text: #eef4ff;
-      --muted: #9eb0c8;
-      --brand: #4fd1c5;
-      --brand-2: #7c5cff;
-      --accent: #ffc857;
-      --danger: #ff7b7b;
-      --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
-      --radius: 24px;
-      --radius-sm: 16px;
-      --max: 1200px;
-    }
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 20% 20%, rgba(124, 92, 255, 0.2), transparent 28%),
-        radial-gradient(circle at 80% 10%, rgba(79, 209, 197, 0.18), transparent 24%),
-        radial-gradient(circle at 50% 85%, rgba(255, 200, 87, 0.14), transparent 22%),
-        linear-gradient(180deg, #06111f 0%, #071420 45%, #081120 100%);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    body::before,
-    body::after {
-      content: "";
-      position: fixed;
-      inset: auto;
-      width: 520px;
-      height: 520px;
-      filter: blur(80px);
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.35;
-      animation: drift 16s ease-in-out infinite alternate;
-    }
-
-    body::before {
-      top: -120px;
-      left: -140px;
-      background: rgba(124, 92, 255, 0.35);
-    }
-
-    body::after {
-      right: -120px;
-      bottom: -150px;
-      background: rgba(79, 209, 197, 0.22);
-      animation-delay: -4s;
-    }
-
-    @keyframes drift {
-      from { transform: translate3d(0, 0, 0) scale(1); }
-      to { transform: translate3d(40px, -25px, 0) scale(1.08); }
-    }
-
-    .grid-lines {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 42px 42px;
-      mask-image: radial-gradient(circle at center, black 20%, transparent 85%);
-      z-index: 0;
-    }
-
-    .page {
-      position: relative;
-      z-index: 1;
-    }
-
-    .container {
-      width: min(calc(100% - 2rem), var(--max));
-      margin: 0 auto;
-    }
-
-    .nav {
-      position: sticky;
-      top: 0;
-      z-index: 40;
-      backdrop-filter: blur(18px);
-      background: rgba(5, 11, 20, 0.55);
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-    }
-
-    .nav-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 0;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.85rem;
-      font-weight: 800;
-      letter-spacing: 0.02em;
-    }
-
-    .brand-badge {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(135deg, var(--brand), var(--brand-2));
-      box-shadow: 0 14px 30px rgba(79, 209, 197, 0.2);
-      font-size: 1.05rem;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .nav-links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.96rem;
-      transition: 180ms ease;
-    }
-
-    .nav-links a:hover { color: var(--text); }
-
-    .btn {
-      border: 0;
-      border-radius: 999px;
-      padding: 0.95rem 1.3rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.6rem;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 26px rgba(0,0,0,0.22);
-    }
-
-    .btn-primary {
-      color: #07121f;
-      background: linear-gradient(135deg, var(--brand), #9af3ec);
-    }
-
-    .btn-secondary {
-      color: var(--text);
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .hero {
-      padding: 4.5rem 0 2.5rem;
-      min-height: 88vh;
-      display: grid;
-      align-items: center;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.08fr 0.92fr;
-      gap: 2rem;
-      align-items: center;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.55rem 0.9rem;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.1);
-      color: var(--brand);
-      background: rgba(255,255,255,0.04);
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.8rem, 6vw, 5.6rem);
-      line-height: 0.96;
-      margin: 0 0 1rem;
-      letter-spacing: -0.04em;
-      max-width: 10ch;
-    }
-
-    .gradient-text {
-      background: linear-gradient(135deg, #ffffff, var(--brand), #bcaeff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .hero p {
-      color: var(--muted);
-      font-size: 1.08rem;
-      line-height: 1.7;
-      max-width: 58ch;
-      margin-bottom: 1.4rem;
-    }
-
-    .hero-actions,
-    .hero-stats,
-    .chip-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.9rem;
-      align-items: center;
-    }
-
-    .hero-stats {
-      margin-top: 1.4rem;
-      gap: 1rem;
-    }
-
-    .stat-chip,
-    .mini-chip {
-      padding: 0.8rem 1rem;
-      border-radius: 16px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-      min-width: 140px;
-    }
-
-    .stat-chip strong {
-      display: block;
-      font-size: 1.2rem;
-    }
-
-    .hero-visual {
-      position: relative;
-      min-height: 560px;
-      display: grid;
-      place-items: center;
-      isolation: isolate;
-    }
-
-    .orbital-ring,
-    .truck-card,
-    .floating-card {
-      position: absolute;
-      border: 1px solid rgba(255,255,255,0.09);
-      background: rgba(8, 20, 32, 0.62);
-      backdrop-filter: blur(18px);
-      box-shadow: var(--shadow);
-    }
-
-    .orbital-ring {
-      width: 460px;
-      height: 460px;
-      border-radius: 50%;
-      border-style: dashed;
-      animation: spin 30s linear infinite;
-      opacity: 0.35;
-      z-index: 1;
-    }
-
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .truck-card {
-      width: min(100%, 520px);
-      border-radius: 32px;
-      padding: 1.4rem;
-      overflow: hidden;
-      transform: perspective(1200px) rotateY(-7deg) rotateX(4deg);
-      z-index: 3;
-    }
-
-    .truck-screen {
-      position: relative;
-      background: linear-gradient(180deg, rgba(124,92,255,0.2), rgba(79,209,197,0.08));
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 24px;
-      padding: 1.2rem;
-      min-height: 360px;
-      overflow: hidden;
-    }
-
-    .truck-screen::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 70% 10%, rgba(79, 209, 197, 0.18), transparent 32%);
-      pointer-events: none;
-    }
-
-    .truck-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.4rem;
-    }
-
-    .badge {
-      padding: 0.45rem 0.75rem;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      color: var(--brand);
-      border: 1px solid rgba(255,255,255,0.08);
-      font-size: 0.83rem;
-    }
-
-    .truck-illustration {
-      position: relative;
-      height: 180px;
-      margin: 1rem 0 1.4rem;
-    }
-
-    .road {
-      position: absolute;
-      bottom: 28px;
-      left: 0;
-      right: 0;
-      height: 12px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
-      overflow: hidden;
-    }
-
-    .road::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(90deg, transparent 0 22px, rgba(255,255,255,0.35) 22px 40px);
-      animation: roadMove 1.4s linear infinite;
-    }
-
-    @keyframes roadMove {
-      from { transform: translateX(0); }
-      to { transform: translateX(-62px); }
-    }
-
-    .truck {
-      position: absolute;
-      left: 12%;
-      bottom: 36px;
-      width: 240px;
-      height: 92px;
-      animation: truckBounce 3s ease-in-out infinite;
-    }
-
-    @keyframes truckBounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-
-    .cab, .box, .wheel, .window, .headlight, .door {
-      position: absolute;
-    }
-
-    .box {
-      width: 140px;
-      height: 68px;
-      left: 0;
-      top: 10px;
-      border-radius: 18px 10px 12px 12px;
-      background: linear-gradient(135deg, var(--brand-2), #9d87ff);
-      box-shadow: inset 0 -8px 20px rgba(255,255,255,0.08);
-    }
-
-    .cab {
-      width: 90px;
-      height: 52px;
-      right: 0;
-      bottom: 14px;
-      border-radius: 16px 14px 12px 8px;
-      background: linear-gradient(135deg, #f8fbff, #d7e5ff);
-    }
-
-    .door {
-      width: 28px;
-      height: 30px;
-      right: 25px;
-      top: 10px;
-      border-radius: 8px;
-      border: 2px solid rgba(8,17,32,0.14);
-    }
-
-    .window {
-      width: 34px;
-      height: 18px;
-      right: 40px;
-      top: 9px;
-      border-radius: 6px 8px 4px 4px;
-      background: rgba(79,209,197,0.55);
-    }
-
-    .headlight {
-      width: 10px;
-      height: 10px;
-      right: -3px;
-      bottom: 11px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 16px rgba(255,200,87,0.7);
-    }
-
-    .wheel {
-      width: 38px;
-      height: 38px;
-      bottom: 0;
-      border-radius: 50%;
-      background: #081120;
-      border: 7px solid #c7d6ef;
-      animation: wheelSpin 1s linear infinite;
-    }
-
-    .wheel::before {
-      content: "";
-      position: absolute;
-      inset: 8px;
-      border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.3);
-    }
-
-    .wheel.one { left: 28px; }
-    .wheel.two { right: 14px; }
-
-    @keyframes wheelSpin {
-      from { transform: rotate(0); }
-      to { transform: rotate(360deg); }
-    }
-
-    .route-bars {
-      display: grid;
-      gap: 0.8rem;
-    }
-
-    .route-row {
-      display: grid;
-      grid-template-columns: 68px 1fr 70px;
-      align-items: center;
-      gap: 0.8rem;
-      font-size: 0.92rem;
-      color: var(--muted);
-    }
-
-    .bar {
-      height: 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.08);
-      overflow: hidden;
-      position: relative;
-    }
-
-    .bar > span {
-      position: absolute;
-      inset: 0;
-      width: var(--w, 50%);
-      border-radius: inherit;
-      background: linear-gradient(90deg, var(--brand), var(--brand-2));
-    }
-
-    .floating-card {
-      padding: 1rem 1.1rem;
-      border-radius: 20px;
-      max-width: 230px;
-      animation: floaty 4.8s ease-in-out infinite;
-      z-index: 5;
-    }
-
-    .floating-card h4,
-    .floating-card p {
-      margin: 0;
-    }
-
-    .floating-card p {
-      color: var(--muted);
-      margin-top: 0.4rem;
-      font-size: 0.92rem;
-      line-height: 1.5;
-    }
-
-    .floating-card.one {
-      top: 2%;
-      left: 0;
-    }
-
-    .floating-card.two {
-      right: 0;
-      bottom: 10%;
-      animation-delay: -1.5s;
-    }
-
-    @keyframes floaty {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-12px); }
-    }
-
-    section {
-      padding: 2.2rem 0;
-    }
-
-    .section-head {
-      margin-bottom: 1.4rem;
-    }
-
-    .section-head h2 {
-      margin: 0 0 0.6rem;
-      font-size: clamp(2rem, 4vw, 3rem);
-    }
-
-    .section-head p {
-      margin: 0;
-      color: var(--muted);
-      max-width: 64ch;
-      line-height: 1.7;
-    }
-
-    .features,
-    .education-grid,
-    .checklist-grid,
-    .faq-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 1rem;
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 1.25rem;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(18px);
-    }
-
-    .feature-card,
-    .edu-card,
-    .faq-card,
-    .check-card {
-      min-height: 220px;
-      transition: transform 220ms ease, border-color 220ms ease;
-    }
-
-    .feature-card:hover,
-    .edu-card:hover,
-    .faq-card:hover,
-    .check-card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(79,209,197,0.35);
-    }
-
-    .icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 16px;
-      display: grid;
-      place-items: center;
-      margin-bottom: 1rem;
-      background: linear-gradient(135deg, rgba(79,209,197,0.18), rgba(124,92,255,0.16));
-      border: 1px solid rgba(255,255,255,0.08);
-      font-size: 1.3rem;
-    }
-
-    .feature-card h3,
-    .estimate-panel h3,
-    .summary-card h3,
-    .contact-card h3,
-    .edu-card h3,
-    .faq-card h3,
-    .check-card h3 {
-      margin: 0 0 0.5rem;
-      font-size: 1.15rem;
-    }
-
-    .feature-card p,
-    .contact-card p,
-    .estimate-panel p,
-    .summary-card p,
-    .fee-note,
-    .mini-note,
-    .edu-card p,
-    .faq-card p,
-    .check-card p {
-      color: var(--muted);
-      line-height: 1.65;
-    }
-
-    .info-banner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-top: 1.2rem;
-    }
-
-    .banner-panel {
-      padding: 1rem 1.1rem;
-      border-radius: 20px;
-      background: linear-gradient(135deg, rgba(79,209,197,0.12), rgba(124,92,255,0.1));
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .banner-panel strong {
-      display: block;
-      margin-bottom: 0.35rem;
-    }
-
-    .estimator-wrap {
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 1rem;
-      align-items: start;
-    }
-
-    .estimate-panel,
-    .summary-card,
-    .contact-card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      padding: 1.3rem;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(16px);
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 1rem;
-    }
-
-    .field,
-    .toggle-group,
-    .check-grid,
-    .smart-guidance {
-      margin-top: 1rem;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-size: 0.92rem;
-      color: #dfe7f7;
-    }
-
-    .label-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
-      margin-bottom: 0.45rem;
-    }
-
-    .help-pill {
-      font-size: 0.74rem;
-      color: var(--brand);
-      border: 1px solid rgba(79,209,197,0.25);
-      background: rgba(79,209,197,0.08);
-      border-radius: 999px;
-      padding: 0.28rem 0.55rem;
-      white-space: nowrap;
-    }
-
-    .helper-text {
-      margin-top: 0.42rem;
-      color: var(--muted);
-      font-size: 0.84rem;
-      line-height: 1.55;
-    }
-
-    input,
-    select {
-      width: 100%;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: var(--text);
-      border-radius: 14px;
-      padding: 0.95rem 1rem;
-      font: inherit;
-      outline: none;
-      transition: border-color 180ms ease, transform 180ms ease;
-    }
-
-    input:focus,
-    select:focus {
-      border-color: rgba(79,209,197,0.55);
-      transform: translateY(-1px);
-    }
-
-    select option {
-      background: #0c1828;
-    }
-
-    .toggle-row,
-    .check-option,
-    .summary-row,
-    .pricing-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-    }
-
-    .toggle-row,
-    .check-option,
-    .guide-card {
-      padding: 0.85rem 1rem;
-      border-radius: 16px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      margin-bottom: 0.8rem;
-    }
-
-    .guide-card {
-      margin-bottom: 0;
-    }
-
-    .check-option {
-      justify-content: flex-start;
-      gap: 0.85rem;
-    }
-
-    .check-option input,
-    .toggle-row input {
-      width: auto;
-      transform: scale(1.15);
-      accent-color: var(--brand);
-    }
-
-    .check-grid,
-    .smart-guidance {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.8rem;
-    }
-
-    .guide-card strong { display: block; margin-bottom: 0.35rem; }
-    .guide-card p { margin: 0; font-size: 0.9rem; }
-
-    .action-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.8rem;
-      margin-top: 1.2rem;
-    }
-
-    .summary-card {
-      position: sticky;
-      top: 92px;
-    }
-
-    .price-total {
-      display: flex;
-      align-items: baseline;
-      gap: 0.5rem;
-      margin: 0.6rem 0 1.2rem;
-    }
-
-    .price-total strong {
-      font-size: clamp(2.4rem, 5vw, 3.7rem);
-      line-height: 1;
-      letter-spacing: -0.04em;
-    }
-
-    .pulse-line {
-      position: relative;
-      height: 8px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.08);
-      overflow: hidden;
-      margin: 1rem 0 1.2rem;
-    }
-
-    .pulse-line span {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, var(--brand), var(--brand-2), var(--accent));
-      width: 55%;
-      animation: pulseTrack 2.8s ease-in-out infinite alternate;
-      border-radius: inherit;
-    }
-
-    @keyframes pulseTrack {
-      from { transform: translateX(-8%); }
-      to { transform: translateX(68%); }
-    }
-
-    .summary-breakdown,
-    .pricing-grid {
-      display: grid;
-      gap: 0.85rem;
-    }
-
-    .summary-row,
-    .pricing-row {
-      padding: 0.82rem 0.95rem;
-      border-radius: 16px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.07);
-      font-size: 0.95rem;
-    }
-
-    .summary-row span:last-child,
-    .pricing-row span:last-child {
-      color: #fff;
-      font-weight: 700;
-    }
-
-    .summary-row.total-row {
-      border-color: rgba(79,209,197,0.35);
-      background: linear-gradient(135deg, rgba(79,209,197,0.12), rgba(124,92,255,0.1));
-    }
-
-    .pricing-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .pricing-row {
-      min-height: 110px;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: space-between;
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 650ms ease, transform 650ms ease;
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
-      gap: 1rem;
-    }
-
-    .contact-list {
-      display: grid;
-      gap: 0.8rem;
-      margin-top: 1rem;
-    }
-
-    .contact-item {
-      padding: 0.95rem 1rem;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.04);
-    }
-
-    .contact-item strong {
-      display: block;
-      margin-bottom: 0.3rem;
-    }
-
-    .footer {
-      padding: 2rem 0 3rem;
-      color: var(--muted);
-      text-align: center;
-    }
-
-    .tiny {
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-
-    @media (max-width: 1050px) {
-      .hero-grid,
-      .estimator-wrap,
-      .contact-grid,
-      .pricing-grid,
-      .features,
-      .education-grid,
-      .checklist-grid,
-      .faq-grid,
-      .info-banner {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-visual {
-        min-height: 520px;
-      }
-
-      .summary-card {
-        position: static;
-      }
-
-      .floating-card.one { left: 1rem; }
-      .floating-card.two { right: 1rem; }
-    }
-
-    @media (max-width: 700px) {
-      .hero {
-        padding-top: 3.5rem;
-      }
-
-      .nav-inner {
-        align-items: flex-start;
-        gap: 1rem;
-        flex-direction: column;
-      }
-
-      .form-grid,
-      .check-grid,
-      .smart-guidance {
-        grid-template-columns: 1fr;
-      }
-
-      .truck-card {
-        transform: none;
-        width: 100%;
-        max-width: 100%;
-      }
-
-      .hero-visual {
-        min-height: 460px;
-      }
-
-      .orbital-ring {
-        width: 310px;
-        height: 310px;
-      }
-
-      .truck {
-        left: 4%;
-        transform: scale(0.88);
-        transform-origin: left bottom;
-      }
-
-      .floating-card {
-        position: relative;
-        max-width: 100%;
-        width: 100%;
-      }
-
-      .floating-card.one,
-      .floating-card.two {
-        top: auto;
-        left: auto;
-        right: auto;
-        bottom: auto;
-      }
-    }
-  </style>
 </head>
 <body>
   <div class="grid-lines"></div>
@@ -1409,6 +451,136 @@
       </div>
     </section>
 
+<!--PHOTO UPLOAD START-->
+    <section id="photo-estimate" class="container reveal">
+  <div class="section-head">
+    <h2>Upload photos for a better estimate</h2>
+    <p>
+      Photos help Movers4Hire understand room fullness, visible boxes, bulky furniture,
+      specialty items, and overall move complexity. This helps produce a more informed estimate.
+    </p>
+  </div>
+
+  <div class="photo-upload-wrap">
+    <div class="photo-panel">
+      <div class="badge">Photo-Assisted Estimate</div>
+      <h3>Show us what you’re moving</h3>
+      <p>
+        Upload photos of rooms, packed boxes, garage areas, storage units, large furniture,
+        or specialty items. The more complete the photos, the better the estimate usually gets.
+      </p>
+
+      <div class="upload-dropzone" id="uploadDropzone">
+        <input
+          id="photoUpload"
+          class="photo-input"
+          type="file"
+          accept="image/*"
+          multiple
+        />
+        <div class="upload-dropzone-content">
+          <div class="upload-icon">📸</div>
+          <strong>Drag photos here or click to upload</strong>
+          <p class="tiny">
+            Good examples: living room, bedrooms, garage, stairs, packed boxes, appliances,
+            safes, pianos, and anything unusually large or fragile.
+          </p>
+        </div>
+      </div>
+
+      <div class="upload-help-grid">
+        <div class="guide-card">
+          <strong>Best photo tips</strong>
+          <p>Take wide shots of each room and separate close-ups of heavy or specialty items.</p>
+        </div>
+        <div class="guide-card">
+          <strong>Freight / weight-based moves</strong>
+          <p>Photos help with rough planning, but final weight-based pricing may still need inventory review.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="photo-summary-card">
+      <div class="badge">Upload Summary</div>
+      <h3>Your photo-assisted estimate status</h3>
+      <p>As photos are added, the site gives a better preliminary guidance level.</p>
+
+      <div class="summary-breakdown">
+        <div class="summary-row">
+          <span>Photos uploaded</span>
+          <span id="photoCount">0</span>
+        </div>
+        <div class="summary-row">
+          <span>Total file size</span>
+          <span id="photoSize">0 MB</span>
+        </div>
+        <div class="summary-row">
+          <span>Estimate confidence</span>
+          <span id="confidenceLevel">Basic</span>
+        </div>
+      </div>
+
+      <div class="summary-row total-row" style="margin-top: 0.9rem;">
+        <span>Guidance</span>
+        <span id="photoGuidance">Add room photos</span>
+      </div>
+
+      <p class="mini-note tiny" id="photoEstimateNote" style="margin-top: 1rem;">
+        Uploading photos does not create a final guaranteed quote, but it can help produce a more informed estimate.
+      </p>
+    </aside>
+  </div>
+
+  <div class="photo-preview-grid" id="photoPreviewGrid"></div>
+</section>
+
+<section id="service-map" class="container reveal">
+  <div class="section-head">
+    <h2>Service area map</h2>
+    <p>
+      Movers4Hire is based in Eugene and serves surrounding Oregon areas. This section helps
+      customers quickly understand whether their move is likely in the normal service zone.
+    </p>
+  </div>
+
+  <div class="map-section-grid">
+    <div class="map-card">
+      <div class="badge">Service Area</div>
+      <h3>Based in Eugene, Oregon</h3>
+      <p>
+        Great for local moves, regional moves, and estimate requests that start in or near Eugene,
+        Springfield, and surrounding communities.
+      </p>
+
+      <div class="contact-list">
+        <div class="contact-item">
+          <strong>Primary Service Area</strong>
+          Eugene, Springfield, Coburg, Junction City, Creswell
+        </div>
+        <div class="contact-item">
+          <strong>Nearby Coverage</strong>
+          Cottage Grove, Veneta, Harrisburg, Corvallis, Salem by request
+        </div>
+        <div class="contact-item">
+          <strong>Long Distance / Freight</strong>
+          Available by custom quote depending on route, inventory, and shipment type
+        </div>
+      </div>
+    </div>
+
+    <div class="map-card map-embed-card">
+      <iframe
+        title="Movers4Hire Service Area Map"
+        src="https://www.google.com/maps?q=Eugene,Oregon&z=10&output=embed"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </div>
+  </div>
+</section>
+
+<!--PHOTO UPLOAD END-->
+
     <section id="contact" class="container reveal">
       <div class="contact-grid">
         <div class="contact-card">
@@ -1469,172 +641,6 @@
     </footer>
   </div>
 
-  <script>
-    const pricingConfig = {
-      baseHourlyByMovers: {
-        2: 120,
-        3: 165,
-        4: 220,
-      },
-      sizeMultipliers: {
-        studio: 1,
-        onebed: 1.1,
-        threebed: 1.22,
-        fourbed: 1.38,
-        office: 1.3,
-      },
-      mileageRate: 3.25,
-      packingLabor: 95,
-      packingSupplies: 45,
-      specialtyFee: 150,
-      minimumHours: {
-        studio: 2.5,
-        onebed: 3,
-        threebed: 5,
-        fourbed: 7,
-        office: 4,
-      }
-    };
-
-    const els = {
-      moveSize: document.getElementById('moveSize'),
-      movers: document.getElementById('movers'),
-      hours: document.getElementById('hours'),
-      miles: document.getElementById('miles'),
-      truckFee: document.getElementById('truckFee'),
-      travelFee: document.getElementById('travelFee'),
-      packingHelp: document.getElementById('packingHelp'),
-      specialty: document.getElementById('specialty'),
-      addons: Array.from(document.querySelectorAll('.addon')),
-      estimateTotal: document.getElementById('estimateTotal'),
-      grandTotalRow: document.getElementById('grandTotalRow'),
-      breakdown: document.getElementById('breakdown'),
-      hourlyRateDisplay: document.getElementById('hourlyRateDisplay'),
-      mileageRateDisplay: document.getElementById('mileageRateDisplay'),
-      timeEstimateText: document.getElementById('timeEstimateText'),
-      recalculateBtn: document.getElementById('recalculateBtn'),
-      resetBtn: document.getElementById('resetBtn'),
-      year: document.getElementById('year'),
-    };
-
-    const currency = (value) =>
-      new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        maximumFractionDigits: 0,
-      }).format(value);
-
-    function getEstimatedHours(size, inputHours) {
-      const min = pricingConfig.minimumHours[size] || 3;
-      return Math.max(Number(inputHours) || min, min);
-    }
-
-    function calculateEstimate() {
-      const moveSize = els.moveSize.value;
-      const movers = Number(els.movers.value);
-      const miles = Math.max(0, Number(els.miles.value) || 0);
-      const truckFee = Math.max(0, Number(els.truckFee.value) || 0);
-      const travelFee = Math.max(0, Number(els.travelFee.value) || 0);
-      const adjustedHours = getEstimatedHours(moveSize, els.hours.value);
-
-      if (Number(els.hours.value) !== adjustedHours) {
-        els.hours.value = adjustedHours;
-      }
-
-      const baseHourly = pricingConfig.baseHourlyByMovers[movers] || 165;
-      const sizeMultiplier = pricingConfig.sizeMultipliers[moveSize] || 1;
-      const hourlyRate = Math.round(baseHourly * sizeMultiplier);
-      const laborCost = hourlyRate * adjustedHours;
-      const mileageCost = miles * pricingConfig.mileageRate;
-
-      const packingCost = els.packingHelp.checked
-        ? pricingConfig.packingLabor + pricingConfig.packingSupplies
-        : 0;
-
-      const specialtyCost = els.specialty.checked ? pricingConfig.specialtyFee : 0;
-
-      const selectedAddons = els.addons
-        .filter((addon) => addon.checked)
-        .map((addon) => ({
-          name: addon.dataset.name,
-          amount: Number(addon.value),
-        }));
-
-      const addonsTotal = selectedAddons.reduce((sum, item) => sum + item.amount, 0);
-      const subtotal = laborCost + mileageCost + truckFee + travelFee + packingCost + specialtyCost + addonsTotal;
-      const estimateTotal = Math.round(subtotal);
-
-      const breakdownItems = [
-        { label: `Labor (${adjustedHours} hrs @ ${currency(hourlyRate)}/hr)`, value: laborCost },
-        { label: `Mileage (${miles} mi @ ${currency(pricingConfig.mileageRate)}/mi)`, value: mileageCost },
-        { label: 'Truck fee', value: truckFee },
-        { label: 'Travel / dispatch', value: travelFee },
-      ];
-
-      if (packingCost) breakdownItems.push({ label: 'Packing service + supplies', value: packingCost });
-      if (specialtyCost) breakdownItems.push({ label: 'Specialty item handling', value: specialtyCost });
-      selectedAddons.forEach((item) => breakdownItems.push({ label: item.name, value: item.amount }));
-
-      els.breakdown.innerHTML = breakdownItems
-        .map((item) => `
-          <div class="summary-row">
-            <span>${item.label}</span>
-            <span>${currency(item.value)}</span>
-          </div>
-        `)
-        .join('');
-
-      els.estimateTotal.textContent = currency(estimateTotal);
-      els.grandTotalRow.textContent = currency(estimateTotal);
-      els.hourlyRateDisplay.textContent = `${currency(hourlyRate)} / hr`;
-      els.mileageRateDisplay.textContent = `${currency(pricingConfig.mileageRate)} / mile`;
-      els.timeEstimateText.textContent = `Suggested minimum for this move type: ${pricingConfig.minimumHours[moveSize]} hours. Crew size selected: ${movers} mover${movers > 1 ? 's' : ''}.`;
-    }
-
-    function resetEstimator() {
-      els.moveSize.value = 'studio';
-      els.movers.value = '3';
-      els.hours.value = '4';
-      els.miles.value = '12';
-      els.truckFee.value = '95';
-      els.travelFee.value = '45';
-      els.packingHelp.checked = false;
-      els.specialty.checked = false;
-      els.addons.forEach((addon) => { addon.checked = false; });
-      calculateEstimate();
-    }
-
-    const observedEls = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.15 });
-
-    observedEls.forEach((el) => observer.observe(el));
-
-    [
-      els.moveSize,
-      els.movers,
-      els.hours,
-      els.miles,
-      els.truckFee,
-      els.travelFee,
-      els.packingHelp,
-      els.specialty,
-      ...els.addons,
-    ].forEach((el) => {
-      el.addEventListener('input', calculateEstimate);
-      el.addEventListener('change', calculateEstimate);
-    });
-
-    els.recalculateBtn.addEventListener('click', calculateEstimate);
-    els.resetBtn.addEventListener('click', resetEstimator);
-    els.year.textContent = new Date().getFullYear();
-
-    calculateEstimate();
-  </script>
+    <script src="js/main.js"></script>
 </body>
 </html>
