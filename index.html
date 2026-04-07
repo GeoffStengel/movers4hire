@@ -94,7 +94,7 @@
     .nav {
       position: sticky;
       top: 0;
-      z-index: 20;
+      z-index: 40;
       backdrop-filter: blur(18px);
       background: rgba(5, 11, 20, 0.55);
       border-bottom: 1px solid rgba(255,255,255,0.07);
@@ -223,7 +223,8 @@
     }
 
     .hero-actions,
-    .hero-stats {
+    .hero-stats,
+    .chip-row {
       display: flex;
       flex-wrap: wrap;
       gap: 0.9rem;
@@ -235,7 +236,8 @@
       gap: 1rem;
     }
 
-    .stat-chip {
+    .stat-chip,
+    .mini-chip {
       padding: 0.8rem 1rem;
       border-radius: 16px;
       background: rgba(255,255,255,0.05);
@@ -253,6 +255,7 @@
       min-height: 560px;
       display: grid;
       place-items: center;
+      isolation: isolate;
     }
 
     .orbital-ring,
@@ -272,6 +275,7 @@
       border-style: dashed;
       animation: spin 30s linear infinite;
       opacity: 0.35;
+      z-index: 1;
     }
 
     @keyframes spin {
@@ -285,6 +289,7 @@
       padding: 1.4rem;
       overflow: hidden;
       transform: perspective(1200px) rotateY(-7deg) rotateX(4deg);
+      z-index: 3;
     }
 
     .truck-screen {
@@ -478,6 +483,7 @@
       border-radius: 20px;
       max-width: 230px;
       animation: floaty 4.8s ease-in-out infinite;
+      z-index: 5;
     }
 
     .floating-card h4,
@@ -493,13 +499,13 @@
     }
 
     .floating-card.one {
-      top: 8%;
-      left: -4%;
+      top: 2%;
+      left: 0;
     }
 
     .floating-card.two {
-      right: -3%;
-      bottom: 14%;
+      right: 0;
+      bottom: 10%;
       animation-delay: -1.5s;
     }
 
@@ -524,11 +530,14 @@
     .section-head p {
       margin: 0;
       color: var(--muted);
-      max-width: 60ch;
+      max-width: 64ch;
       line-height: 1.7;
     }
 
-    .features {
+    .features,
+    .education-grid,
+    .checklist-grid,
+    .faq-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 1rem;
@@ -543,12 +552,18 @@
       backdrop-filter: blur(18px);
     }
 
-    .feature-card {
+    .feature-card,
+    .edu-card,
+    .faq-card,
+    .check-card {
       min-height: 220px;
       transition: transform 220ms ease, border-color 220ms ease;
     }
 
-    .feature-card:hover {
+    .feature-card:hover,
+    .edu-card:hover,
+    .faq-card:hover,
+    .check-card:hover {
       transform: translateY(-6px);
       border-color: rgba(79,209,197,0.35);
     }
@@ -568,7 +583,10 @@
     .feature-card h3,
     .estimate-panel h3,
     .summary-card h3,
-    .contact-card h3 {
+    .contact-card h3,
+    .edu-card h3,
+    .faq-card h3,
+    .check-card h3 {
       margin: 0 0 0.5rem;
       font-size: 1.15rem;
     }
@@ -578,9 +596,31 @@
     .estimate-panel p,
     .summary-card p,
     .fee-note,
-    .mini-note {
+    .mini-note,
+    .edu-card p,
+    .faq-card p,
+    .check-card p {
       color: var(--muted);
       line-height: 1.65;
+    }
+
+    .info-banner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.2rem;
+    }
+
+    .banner-panel {
+      padding: 1rem 1.1rem;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(79,209,197,0.12), rgba(124,92,255,0.1));
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .banner-panel strong {
+      display: block;
+      margin-bottom: 0.35rem;
     }
 
     .estimator-wrap {
@@ -609,7 +649,8 @@
 
     .field,
     .toggle-group,
-    .check-grid {
+    .check-grid,
+    .smart-guidance {
       margin-top: 1rem;
     }
 
@@ -618,6 +659,31 @@
       margin-bottom: 0.5rem;
       font-size: 0.92rem;
       color: #dfe7f7;
+    }
+
+    .label-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.45rem;
+    }
+
+    .help-pill {
+      font-size: 0.74rem;
+      color: var(--brand);
+      border: 1px solid rgba(79,209,197,0.25);
+      background: rgba(79,209,197,0.08);
+      border-radius: 999px;
+      padding: 0.28rem 0.55rem;
+      white-space: nowrap;
+    }
+
+    .helper-text {
+      margin-top: 0.42rem;
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.55;
     }
 
     input,
@@ -654,12 +720,17 @@
     }
 
     .toggle-row,
-    .check-option {
+    .check-option,
+    .guide-card {
       padding: 0.85rem 1rem;
       border-radius: 16px;
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(255,255,255,0.08);
       margin-bottom: 0.8rem;
+    }
+
+    .guide-card {
+      margin-bottom: 0;
     }
 
     .check-option {
@@ -674,11 +745,15 @@
       accent-color: var(--brand);
     }
 
-    .check-grid {
+    .check-grid,
+    .smart-guidance {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 0.8rem;
     }
+
+    .guide-card strong { display: block; margin-bottom: 0.35rem; }
+    .guide-card p { margin: 0; font-size: 0.9rem; }
 
     .action-row {
       display: flex;
@@ -816,20 +891,24 @@
       .estimator-wrap,
       .contact-grid,
       .pricing-grid,
-      .features {
+      .features,
+      .education-grid,
+      .checklist-grid,
+      .faq-grid,
+      .info-banner {
         grid-template-columns: 1fr;
       }
 
       .hero-visual {
-        min-height: 460px;
+        min-height: 520px;
       }
 
       .summary-card {
         position: static;
       }
 
-      .floating-card.one { left: 0; }
-      .floating-card.two { right: 0; }
+      .floating-card.one { left: 1rem; }
+      .floating-card.two { right: 1rem; }
     }
 
     @media (max-width: 700px) {
@@ -844,16 +923,19 @@
       }
 
       .form-grid,
-      .check-grid {
+      .check-grid,
+      .smart-guidance {
         grid-template-columns: 1fr;
       }
 
       .truck-card {
         transform: none;
+        width: 100%;
+        max-width: 100%;
       }
 
       .hero-visual {
-        min-height: 400px;
+        min-height: 460px;
       }
 
       .orbital-ring {
@@ -868,8 +950,17 @@
       }
 
       .floating-card {
-        max-width: 180px;
-        font-size: 0.9rem;
+        position: relative;
+        max-width: 100%;
+        width: 100%;
+      }
+
+      .floating-card.one,
+      .floating-card.two {
+        top: auto;
+        left: auto;
+        right: auto;
+        bottom: auto;
       }
     }
   </style>
@@ -890,8 +981,9 @@
 
         <div class="nav-links">
           <a href="#services">Services</a>
+          <a href="#learn">Learn</a>
           <a href="#estimate">Estimator</a>
-          <a href="#pricing">Pricing</a>
+          <a href="#faq">FAQ</a>
           <a href="#contact">Contact</a>
           <a class="btn btn-primary" href="#estimate">Get Estimate</a>
         </div>
@@ -909,7 +1001,7 @@
 
           <div class="hero-actions">
             <a class="btn btn-primary" href="#estimate">Estimate My Move</a>
-            <a class="btn btn-secondary" href="#services">See Services</a>
+            <a class="btn btn-secondary" href="#learn">How Pricing Works</a>
           </div>
 
           <div class="hero-stats">
@@ -1014,6 +1106,70 @@
           <p>Hourly labor, flat truck fee, mileage charge, travel fee, and special handling options all roll into one polished estimate.</p>
         </article>
       </div>
+
+      <div class="info-banner">
+        <div class="banner-panel">
+          <strong>New to moving?</strong>
+          <span class="tiny">The site now teaches users what affects pricing, what questions matter, and how to prepare so they feel informed instead of overwhelmed.</span>
+        </div>
+        <div class="banner-panel">
+          <strong>Good for operations too</strong>
+          <span class="tiny">Better-educated customers usually mean cleaner estimates, fewer surprises, and better-quality leads for the team.</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="learn" class="container reveal">
+      <div class="section-head">
+        <h2>How moving prices actually work</h2>
+        <p>
+          Most customers have not moved in years, so this section explains the basics in plain English and helps them know what to ask before they request a quote.
+        </p>
+      </div>
+
+      <div class="education-grid">
+        <article class="card edu-card">
+          <div class="icon">⏱️</div>
+          <h3>Time affects labor cost</h3>
+          <p>Hourly pricing depends on home size, access, organization, stairs, elevator wait times, and how prepared everything is before the crew arrives.</p>
+        </article>
+
+        <article class="card edu-card">
+          <div class="icon">📏</div>
+          <h3>Distance and carry matter</h3>
+          <p>Local jobs may include mileage, truck fees, or long-carry charges when movers must walk a significant distance from the truck to the home.</p>
+        </article>
+
+        <article class="card edu-card">
+          <div class="icon">🏋️</div>
+          <h3>Heavy items change the job</h3>
+          <p>Pianos, safes, appliances, marble tops, and oversized furniture often require extra time, more labor, special tools, or added protection.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="container reveal">
+      <div class="section-head">
+        <h2>Before you ask for a quote</h2>
+        <p>
+          A little prep makes the estimate much more accurate. These quick checks help users understand what info they should gather before booking.
+        </p>
+      </div>
+
+      <div class="checklist-grid">
+        <article class="card check-card">
+          <h3>Know your move type</h3>
+          <p>Is it local, long-distance, freight-based, or a storage-to-home move? The pricing model may change depending on the route.</p>
+        </article>
+        <article class="card check-card">
+          <h3>Count tricky access points</h3>
+          <p>Stairs, elevators, parking distance, gate codes, and narrow hallways can all affect time and labor requirements.</p>
+        </article>
+        <article class="card check-card">
+          <h3>List specialty items</h3>
+          <p>Flag anything oversized, delicate, very heavy, or expensive. Those items often need special handling or additional crew planning.</p>
+        </article>
+      </div>
     </section>
 
     <section id="estimate" class="container reveal">
@@ -1029,9 +1185,23 @@
           <h3>Customize the move</h3>
           <p>Everything updates live. These sample rates are easy to tweak later to match your actual pricing.</p>
 
+          <div class="smart-guidance">
+            <div class="guide-card">
+              <strong>Not sure where to start?</strong>
+              <p>Smaller apartments usually need 2 movers. Larger homes often move faster and safer with 3 or 4.</p>
+            </div>
+            <div class="guide-card">
+              <strong>Want a better estimate?</strong>
+              <p>Have room count, rough mileage, specialty items, and packing status ready before filling this out.</p>
+            </div>
+          </div>
+
           <div class="form-grid">
             <div class="field">
-              <label for="moveSize">Move size</label>
+              <div class="label-row">
+                <label for="moveSize">Move size</label>
+                <span class="help-pill">Helps set time range</span>
+              </div>
               <select id="moveSize">
                 <option value="studio">Studio / Small 1 Bed</option>
                 <option value="onebed">1–2 Bedroom</option>
@@ -1039,35 +1209,56 @@
                 <option value="fourbed">4+ Bedroom / Large Home</option>
                 <option value="office">Small Office / Commercial</option>
               </select>
+              <div class="helper-text">Home size is one of the fastest ways to estimate labor hours and crew size.</div>
             </div>
 
             <div class="field">
-              <label for="movers">Number of movers</label>
+              <div class="label-row">
+                <label for="movers">Number of movers</label>
+                <span class="help-pill">Affects hourly rate</span>
+              </div>
               <select id="movers">
                 <option value="2">2 movers</option>
                 <option value="3" selected>3 movers</option>
                 <option value="4">4 movers</option>
               </select>
+              <div class="helper-text">More movers usually cost more per hour, but they can reduce total job time on larger moves.</div>
             </div>
 
             <div class="field">
-              <label for="hours">Estimated labor hours</label>
+              <div class="label-row">
+                <label for="hours">Estimated labor hours</label>
+                <span class="help-pill">Minimums apply</span>
+              </div>
               <input id="hours" type="number" min="2" max="24" step="0.5" value="4" />
+              <div class="helper-text">Hours depend on packing level, stairs, walk distance, elevators, and how organized the items are.</div>
             </div>
 
             <div class="field">
-              <label for="miles">Mileage between locations</label>
+              <div class="label-row">
+                <label for="miles">Mileage between locations</label>
+                <span class="help-pill">Route based</span>
+              </div>
               <input id="miles" type="number" min="0" max="500" step="1" value="12" />
+              <div class="helper-text">Mileage matters for local and regional estimates and can help explain total truck-related cost.</div>
             </div>
 
             <div class="field">
-              <label for="truckFee">Truck fee</label>
+              <div class="label-row">
+                <label for="truckFee">Truck fee</label>
+                <span class="help-pill">Equipment + vehicle</span>
+              </div>
               <input id="truckFee" type="number" min="0" max="1000" step="5" value="95" />
+              <div class="helper-text">This can cover use of the truck, pads, dollies, straps, and basic moving equipment.</div>
             </div>
 
             <div class="field">
-              <label for="travelFee">Travel / dispatch fee</label>
+              <div class="label-row">
+                <label for="travelFee">Travel / dispatch fee</label>
+                <span class="help-pill">Crew travel time</span>
+              </div>
               <input id="travelFee" type="number" min="0" max="500" step="5" value="45" />
+              <div class="helper-text">Some movers charge for travel to and from the job depending on service area and dispatch distance.</div>
             </div>
           </div>
 
@@ -1127,7 +1318,7 @@
           </div>
 
           <p class="fee-note tiny">
-            Heads-up: this is an estimate UI for the website, not a legal final quote. You can later hook this to a form, email capture, CRM, or online booking flow.
+            Heads-up: this is an estimate UI for the website, not a legal final quote. You can later hook this to a form, photo upload flow, email capture, CRM, calendar availability, or booking request system.
           </p>
         </div>
 
@@ -1182,27 +1373,63 @@
       </div>
     </section>
 
+    <section id="faq" class="container reveal">
+      <div class="section-head">
+        <h2>Common questions people forget to ask</h2>
+        <p>
+          This helps customers who have not moved in a long time understand what matters before move day, what can affect price, and what info helps create a better quote.
+        </p>
+      </div>
+
+      <div class="faq-grid">
+        <article class="card faq-card">
+          <h3>How do I know how many movers I need?</h3>
+          <p>Studios and small apartments often work with 2 movers. Bigger homes, stairs, large furniture, and tighter timelines usually benefit from 3 or 4.</p>
+        </article>
+        <article class="card faq-card">
+          <h3>What is a long carry?</h3>
+          <p>A long carry means the truck cannot park close to the entrance, so movers spend extra time walking items a longer distance.</p>
+        </article>
+        <article class="card faq-card">
+          <h3>What counts as a specialty item?</h3>
+          <p>Safes, pianos, large appliances, marble pieces, oversized sectionals, and certain gym equipment can require extra labor or equipment.</p>
+        </article>
+        <article class="card faq-card">
+          <h3>Does packing affect the quote?</h3>
+          <p>Yes. Fully packed homes usually move faster than homes where loose items still need to be boxed, wrapped, or protected by the crew.</p>
+        </article>
+        <article class="card faq-card">
+          <h3>Why does access matter?</h3>
+          <p>Flights of stairs, elevators, reserved loading zones, parking limits, and narrow hallways can all change time and difficulty.</p>
+        </article>
+        <article class="card faq-card">
+          <h3>Can photos help with estimates?</h3>
+          <p>Yes. Photo uploads can make quotes more informed by showing room fullness, visible boxes, furniture size, and special handling needs.</p>
+        </article>
+      </div>
+    </section>
+
     <section id="contact" class="container reveal">
       <div class="contact-grid">
         <div class="contact-card">
           <div class="badge">Why this works</div>
           <h3>Conversion-minded design</h3>
           <p>
-            Hero animation grabs attention. Estimator keeps people engaged. Clear pricing reduces friction. And the layout gives Movers4Hire a premium, modern brand presence instead of “generic local business template from 2012.”
+            Hero animation grabs attention. Estimator keeps people engaged. Clear pricing reduces friction. Educational sections build trust. And the layout gives Movers4Hire a premium, modern brand presence instead of “generic local business template from 2012.”
           </p>
 
           <div class="contact-list">
             <div class="contact-item">
               <strong>Perfect next steps</strong>
-              Connect the estimator to a quote request form and email the estimate automatically.
+              Connect the estimator to a quote request form, availability calendar, and automatic follow-up email.
             </div>
             <div class="contact-item">
               <strong>Easy content upgrades</strong>
-              Add testimonials, service-area pages, before/after galleries, FAQs, and Google review embeds.
+              Add testimonials, service-area pages, before/after galleries, FAQs, review embeds, and guided moving checklists.
             </div>
             <div class="contact-item">
               <strong>Sales angle</strong>
-              Let users save their quote and schedule a callback. Very chef’s kiss.
+              Let users upload photos, save their quote, and request available dates for callback or booking review. Very chef’s kiss.
             </div>
           </div>
         </div>
@@ -1231,7 +1458,7 @@
 
           <div class="action-row" style="margin-top: 1rem;">
             <a href="#estimate" class="btn btn-primary">Get My Estimate</a>
-            <a href="#services" class="btn btn-secondary">Explore Features</a>
+            <a href="#learn" class="btn btn-secondary">Learn First</a>
           </div>
         </div>
       </div>
