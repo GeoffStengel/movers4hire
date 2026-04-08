@@ -967,6 +967,7 @@
   border-radius: 22px;
   overflow: hidden;
   box-shadow: var(--shadow);
+  position: relative;
 }
 
 .photo-preview-card img {
@@ -990,6 +991,29 @@
   color: var(--muted);
   font-size: 0.82rem;
 }
+
+.remove-photo {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0,0,0,0.7);
+  color: white;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.photo-preview-card:hover .remove-photo {
+  display: flex;
+}  
+/*PHOTO END*/
 
 .map-embed-card {
   padding: 0;
