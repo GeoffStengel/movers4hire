@@ -1159,8 +1159,30 @@
     justify-content: space-between;
   }
 }
-/*Hamuburger END*/
+/***Hamuburger END***/
 
+/***PDF START***/
+/***PDF START***/
+.pdf-doc {
+  font-family: Arial, sans-serif;
+  padding: 30px;
+  color: #111;
+  background: #fff;
+}
+
+.pdf-doc h1 {
+  margin-bottom: 10px;
+}
+
+.pdf-doc h2 {
+  margin-top: 20px;
+  margin-bottom: 8px;
+}
+
+.pdf-doc hr {
+  margin: 15px 0;
+}
+/***PDF END***/
 
 @media (max-width: 1050px) {
   .photo-upload-wrap,

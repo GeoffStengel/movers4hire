@@ -21,7 +21,7 @@
             <div class="tiny">Eugene, Oregon</div>
           </div>
         </div>
-    
+
         <!-- Desktop Nav -->
         <div class="nav-links desktop-nav">
           <a href="#services">Services</a>
@@ -33,14 +33,14 @@
           <a href="#contact">Contact</a>
           <a class="btn btn-primary" href="#estimate">Get Estimate</a>
         </div>
-    
+
         <!-- Hamburger Button -->
         <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
           <span class="hamburger-line"></span>
           <span class="hamburger-line"></span>
           <span class="hamburger-line"></span>
         </button>
-    
+
         <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobileMenu">
           <div class="mobile-menu-inner">
@@ -392,6 +392,7 @@
         <aside class="summary-card">
           <div class="badge">Live Estimate</div>
           <h3>Your projected move total</h3>
+          <button id="downloadPdfBtn" class="btn-primary">  📄 Download Estimate PDF</button>
           <p>Numbers refresh instantly as selections change. Fancy, useful, and very conversion-friendly.</p>
 
           <div class="price-total">
@@ -667,6 +668,41 @@
     </footer>
   </div>
 
+  <!--PDF START-->
+ 
+<!-- PDF TEMPLATE - Hidden -->
+ <!---
+<div id="pdfTemplate" style="display: none;">
+  <div id="pdfContent" style="width: 800px; padding: 50px 60px; background: white; color: #111111; font-family: Arial, sans-serif;">
+    
+    <h1 style="color: #1e3a8a; text-align: center; margin-bottom: 10px;">Movers4Hire Estimate</h1>
+    <p style="text-align: center; color: #555;" id="pdfDate"></p>
+
+    <h2 style="color: #1e3a8a; margin-top: 40px;">Move Details</h2>
+    <table style="width: 100%; margin: 20px 0; border-collapse: collapse;" id="pdfDetails"></table>
+
+    <h2 style="color: #1e3a8a; margin-top: 40px;">Cost Breakdown</h2>
+    <div id="pdfBreakdown" style="margin: 25px 0;"></div>
+
+    <div style="margin-top: 50px; text-align: right; border-top: 4px solid #4fd1c5; padding-top: 25px;">
+      <strong style="font-size: 1.4rem; color: #444;">Grand Total</strong><br>
+      <span id="pdfTotal" style="font-size: 42px; font-weight: bold; color: #1e3a8a;"></span>
+    </div>
+
+    <p style="margin-top: 60px; font-size: 0.95rem; color: #666; text-align: center;">
+      * This is a preliminary estimate only. Final cost may vary based on actual conditions.
+    </p>
+  </div>
+</div> -->
+<!--PDF END-->
+
+
     <script src="js/main.js"></script>
+    <!--PDF SCRIPT START-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+    <!--PDF SCRIPT END-->
 </body>
 </html>

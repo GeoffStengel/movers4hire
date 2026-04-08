@@ -451,6 +451,129 @@ function initHamburger() {
 }
 // test hamburger end
 
+
+// ====================== PDF GENERATION - MINIMAL TEST ======================
+// ====================== COMPACT ONE-PAGE PDF ======================
+function generatePDF() {
+  if (!els.estimateTotal || !els.breakdown) {
+    alert("Please calculate an estimate first.");
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+
+  const today = new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+
+  // Header
+  doc.setFontSize(24);
+  doc.setTextColor(30, 58, 138);
+  doc.text("Movers4Hire", pageWidth / 2, 22, { align: "center" });
+
+  doc.setFontSize(10);
+  doc.setTextColor(100, 100, 100);
+  doc.text("Eugene, Oregon • Professional Moving Services", pageWidth / 2, 30, { align: "center" });
+
+  doc.setFontSize(9);
+  doc.text(today, pageWidth - 25, 22, { align: "right" });
+
+  // Teal line
+  doc.setDrawColor(79, 209, 197);
+  doc.setLineWidth(0.8);
+  doc.line(20, 38, pageWidth - 20, 38);
+
+  let y = 52;
+
+  // Move Details (compact)
+  doc.setFontSize(14);
+  doc.setTextColor(30, 58, 138);
+  doc.text("Move Details", 20, y);
+  y += 10;
+
+  const moveSizeText = els.moveSize?.options[els.moveSize.selectedIndex]?.text || "Not selected";
+
+  const details = [
+    ["Move Size", moveSizeText],
+    ["Crew Size", (els.movers?.value || "3") + " movers"],
+    ["Est. Hours", (els.hours?.value || "0") + " hrs"],
+    ["Mileage", (els.miles?.value || "0") + " mi"]
+  ];
+
+  doc.autoTable({
+    startY: y,
+    head: [["Item", "Value"]],
+    body: details,
+    theme: 'striped',
+    styles: { fontSize: 10, cellPadding: 5 },
+    headStyles: { fillColor: [79, 209, 197], textColor: 255, fontSize: 10 },
+    columnStyles: { 0: { cellWidth: 70, fontStyle: 'bold' } }
+  });
+
+  y = doc.lastAutoTable.finalY + 18;
+
+  // Cost Breakdown (compact)
+  doc.setFontSize(14);
+  doc.setTextColor(30, 58, 138);
+  doc.text("Cost Breakdown", 20, y);
+  y += 10;
+
+  const breakdownRows = [];
+  els.breakdown.querySelectorAll('.summary-row').forEach(row => {
+    const spans = row.querySelectorAll('span');
+    if (spans.length >= 2) {
+      breakdownRows.push([
+        spans[0].textContent.trim(),
+        spans[1].textContent.trim()
+      ]);
+    }
+  });
+
+  doc.autoTable({
+    startY: y,
+    head: [["Description", "Amount"]],
+    body: breakdownRows,
+    theme: 'grid',
+    styles: { fontSize: 10, cellPadding: 5 },
+    headStyles: { fillColor: [79, 209, 197], textColor: 255 },
+    columnStyles: { 1: { halign: 'right', fontStyle: 'bold' } }
+  });
+
+  y = doc.lastAutoTable.finalY + 22;
+
+  // Grand Total (prominent)
+  doc.setDrawColor(79, 209, 197);
+  doc.setLineWidth(1);
+  doc.line(20, y, pageWidth - 20, y);
+
+  doc.setFontSize(16);
+  doc.text("Grand Total", 20, y + 15);
+
+  doc.setFontSize(29);
+  doc.setTextColor(30, 58, 138);
+  doc.text(els.estimateTotal.textContent || "$0", pageWidth - 25, y + 18, { align: "right" });
+
+  // Footer (compact)
+  doc.setFontSize(9);
+  doc.setTextColor(110, 110, 110);
+  const footerY = doc.internal.pageSize.getHeight() - 18;
+  doc.text("This is a preliminary estimate only. Final cost may vary.", 20, footerY, { maxWidth: pageWidth - 40 });
+
+  doc.setFontSize(8);
+  doc.text("Movers4Hire • Eugene, Oregon", pageWidth / 2, footerY + 8, { align: "center" });
+
+  // Save
+  doc.save(`Movers4Hire_Estimate_${new Date().toISOString().slice(0,10)}.pdf`);
+}
+
+// Button
+document.getElementById('downloadPdfBtn')?.addEventListener('click', generatePDF);
+// ========== PDF END =====================
+
 function init() {
   initEstimator();
   initPhotoUpload();
