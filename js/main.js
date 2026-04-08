@@ -281,14 +281,33 @@ function renderPhotoPreviews(files) {
   });
 }
 
+function isDuplicateFile(newFile, existingFiles) {
+  return existingFiles.some((file) =>
+    file.name === newFile.name &&
+    file.size === newFile.size &&
+    file.lastModified === newFile.lastModified
+  );
+}
+
+function syncInputFiles() {
+  if (!photoUpload) return;
+
+  const dataTransfer = new DataTransfer();
+  uploadedPhotos.forEach((file) => dataTransfer.items.add(file));
+  photoUpload.files = dataTransfer.files;
+}
+
 function handleFiles(fileList) {
   const validFiles = Array.from(fileList).filter((file) =>
     file.type.startsWith('image/')
   );
 
-  uploadedPhotos = validFiles;
+  const newFiles = validFiles.filter((file) => !isDuplicateFile(file, uploadedPhotos));
+  uploadedPhotos = [...uploadedPhotos, ...newFiles];
+
   renderPhotoSummary(uploadedPhotos);
   renderPhotoPreviews(uploadedPhotos);
+  syncInputFiles();
 }
 
 if (photoUpload) {
@@ -318,10 +337,6 @@ if (uploadDropzone) {
     const files = event.dataTransfer?.files;
     if (!files) return;
     handleFiles(files);
-
-    if (photoUpload) {
-      photoUpload.files = files;
-    }
   });
 }
 

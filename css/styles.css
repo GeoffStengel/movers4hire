@@ -120,6 +120,10 @@
       font-size: 1.05rem;
     }
 
+    .brand-badge a{
+      text-decoration: none;
+    }
+
     .nav-links {
       display: flex;
       gap: 1rem;
