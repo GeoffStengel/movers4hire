@@ -405,11 +405,58 @@ function initScrollReveal() {
   document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
 }
 
+// test hamurger start
+// ====================== HAMBURGER MENU ======================
+function initHamburger() {
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  if (!hamburger || !mobileMenu) return;
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = hamburger.classList.toggle('active');
+    mobileMenu.classList.toggle('open');
+    
+    // Accessibility
+    hamburger.setAttribute('aria-expanded', isOpen);
+    
+    // Optional: prevent body scroll when menu is open
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  });
+
+  // Close menu when clicking a link
+  const mobileLinks = mobileMenu.querySelectorAll('a');
+  mobileLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('active');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+      hamburger.classList.remove('active');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+      hamburger.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
+// test hamburger end
+
 function init() {
   initEstimator();
   initPhotoUpload();
   initScrollReveal();
-
+  initHamburger();
+    
   calculateEstimate();
   renderPhotoSummary();
 }
