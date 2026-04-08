@@ -1,5 +1,4 @@
-// main.js - Movers4Hire | Estimator + Photo Upload (Final Version)
-
+// main.js - Movers4Hire | Estimator + Photo Upload (Final)
 
 // ====================== PRICING CONFIG ======================
 const pricingConfig = {
@@ -57,11 +56,11 @@ const photoEls = {
 let uploadedPhotos = [];
 
 // ====================== UTILITIES ======================
-const currency = (value) => 
-  new Intl.NumberFormat('en-US', { 
-    style: 'currency', 
-    currency: 'USD', 
-    maximumFractionDigits: 0 
+const currency = (value) =>
+  new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0
   }).format(Math.round(value));
 
 const debounce = (fn, delay = 280) => {
@@ -87,7 +86,7 @@ function calculateEstimate() {
   const truckFee = Math.max(0, Number(els.truckFee?.value) || 0);
   const travelFee = Math.max(0, Number(els.travelFee?.value) || 0);
 
-  let adjustedHours = getEstimatedHours(moveSize, els.hours?.value);
+  const adjustedHours = getEstimatedHours(moveSize, els.hours?.value);
 
   if (els.hours && Number(els.hours.value) !== adjustedHours) {
     els.hours.value = adjustedHours;
@@ -99,16 +98,29 @@ function calculateEstimate() {
 
   const laborCost = hourlyRate * adjustedHours;
   const mileageCost = miles * pricingConfig.mileageRate;
-  const packingCost = els.packingHelp?.checked ? pricingConfig.packingLabor + pricingConfig.packingSupplies : 0;
+  const packingCost = els.packingHelp?.checked
+    ? pricingConfig.packingLabor + pricingConfig.packingSupplies
+    : 0;
   const specialtyCost = els.specialty?.checked ? pricingConfig.specialtyFee : 0;
 
   const selectedAddons = (els.addons || [])
-    .filter(addon => addon.checked)
-    .map(addon => ({ name: addon.dataset.name, amount: Number(addon.value) }));
+    .filter((addon) => addon.checked)
+    .map((addon) => ({
+      name: addon.dataset.name,
+      amount: Number(addon.value)
+    }));
 
   const addonsTotal = selectedAddons.reduce((sum, item) => sum + item.amount, 0);
 
-  const total = Math.round(laborCost + mileageCost + truckFee + travelFee + packingCost + specialtyCost + addonsTotal);
+  const total = Math.round(
+    laborCost +
+    mileageCost +
+    truckFee +
+    travelFee +
+    packingCost +
+    specialtyCost +
+    addonsTotal
+  );
 
   const breakdownItems = [
     { label: `Labor (${adjustedHours} hrs @ ${currency(hourlyRate)}/hr)`, value: laborCost },
@@ -117,12 +129,20 @@ function calculateEstimate() {
     { label: 'Travel / dispatch', value: travelFee }
   ];
 
-  if (packingCost) breakdownItems.push({ label: 'Packing service + supplies', value: packingCost });
-  if (specialtyCost) breakdownItems.push({ label: 'Specialty item handling', value: specialtyCost });
-  selectedAddons.forEach(item => breakdownItems.push({ label: item.name, value: item.amount }));
+  if (packingCost) {
+    breakdownItems.push({ label: 'Packing service + supplies', value: packingCost });
+  }
+
+  if (specialtyCost) {
+    breakdownItems.push({ label: 'Specialty item handling', value: specialtyCost });
+  }
+
+  selectedAddons.forEach((item) => {
+    breakdownItems.push({ label: item.name, value: item.amount });
+  });
 
   if (els.breakdown) {
-    els.breakdown.innerHTML = breakdownItems.map(item => `
+    els.breakdown.innerHTML = breakdownItems.map((item) => `
       <div class="summary-row">
         <span>${item.label}</span>
         <span>${currency(item.value)}</span>
@@ -130,13 +150,13 @@ function calculateEstimate() {
     `).join('');
   }
 
-  els.estimateTotal && (els.estimateTotal.textContent = currency(total));
-  els.grandTotalRow && (els.grandTotalRow.textContent = currency(total));
-  els.hourlyRateDisplay && (els.hourlyRateDisplay.textContent = `${currency(hourlyRate)} / hr`);
-  els.mileageRateDisplay && (els.mileageRateDisplay.textContent = `${currency(pricingConfig.mileageRate)} / mile`);
+  if (els.estimateTotal) els.estimateTotal.textContent = currency(total);
+  if (els.grandTotalRow) els.grandTotalRow.textContent = currency(total);
+  if (els.hourlyRateDisplay) els.hourlyRateDisplay.textContent = `${currency(hourlyRate)} / hr`;
+  if (els.mileageRateDisplay) els.mileageRateDisplay.textContent = `${currency(pricingConfig.mileageRate)} / mile`;
 
   if (els.timeEstimateText) {
-    els.timeEstimateText.textContent = 
+    els.timeEstimateText.textContent =
       `Suggested minimum: ${pricingConfig.minimumHours[moveSize]} hours • ${movers} mover${movers > 1 ? 's' : ''}`;
   }
 }
@@ -146,20 +166,22 @@ function resetEstimator() {
   if (!els.moveSize) return;
 
   els.moveSize.value = 'studio';
-  els.movers && (els.movers.value = '3');
-  els.miles && (els.miles.value = '12');
-  els.truckFee && (els.truckFee.value = '95');
-  els.travelFee && (els.travelFee.value = '45');
-  els.packingHelp && (els.packingHelp.checked = false);
-  els.specialty && (els.specialty.checked = false);
-  (els.addons || []).forEach(addon => addon.checked = false);
+  if (els.movers) els.movers.value = '3';
+  if (els.miles) els.miles.value = '12';
+  if (els.truckFee) els.truckFee.value = '95';
+  if (els.travelFee) els.travelFee.value = '45';
+  if (els.packingHelp) els.packingHelp.checked = false;
+  if (els.specialty) els.specialty.checked = false;
+  (els.addons || []).forEach((addon) => { addon.checked = false; });
 
-  if (els.hours) els.hours.value = pricingConfig.minimumHours.studio;
+  if (els.hours) {
+    els.hours.value = pricingConfig.minimumHours.studio;
+  }
 
   calculateEstimate();
 }
 
-// ====================== PHOTO UPLOAD ======================
+// ====================== PHOTO UPLOAD HELPERS ======================
 function formatFileSize(bytes) {
   return bytes === 0 ? '0 MB' : `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
@@ -178,47 +200,90 @@ function renderPhotoSummary() {
   const conf = getConfidenceData(uploadedPhotos.length);
 
   photoEls.count.textContent = uploadedPhotos.length;
-  photoEls.size && (photoEls.size.textContent = formatFileSize(totalBytes));
-  photoEls.confidenceLevel && (photoEls.confidenceLevel.textContent = conf.level);
-  photoEls.guidance && (photoEls.guidance.textContent = conf.guidance);
-  photoEls.note && (photoEls.note.textContent = conf.note);
+  if (photoEls.size) photoEls.size.textContent = formatFileSize(totalBytes);
+  if (photoEls.confidenceLevel) photoEls.confidenceLevel.textContent = conf.level;
+  if (photoEls.guidance) photoEls.guidance.textContent = conf.guidance;
+  if (photoEls.note) photoEls.note.textContent = conf.note;
+}
+
+function syncPhotoInput() {
+  if (!photoEls.upload) return;
+  try {
+    const dt = new DataTransfer();
+    uploadedPhotos.forEach(file => dt.items.add(file));
+    photoEls.upload.files = dt.files;
+  } catch (err) {
+    console.warn('Could not sync files to hidden input:', err);
+  }
+}
+
+function createPhotoCard(file, index) {
+  const card = document.createElement('article');
+  card.className = 'photo-preview-card';
+  card.dataset.index = String(index);
+
+  card.innerHTML = `
+    <img src="" alt="Move photo ${index + 1}">
+    <div class="photo-preview-meta">
+      <strong>${file.name}</strong>
+      <span>${formatFileSize(file.size)}</span>
+    </div>
+    <button class="remove-photo" data-index="${index}" aria-label="Remove this photo" type="button">×</button>
+  `;
+
+  const img = card.querySelector('img');
+  const reader = new FileReader();
+  reader.onload = (e) => { img.src = e.target.result || ''; };
+  reader.readAsDataURL(file);
+
+  return card;
 }
 
 function renderPhotoPreviews() {
   if (!photoEls.previewGrid) return;
   photoEls.previewGrid.innerHTML = '';
 
+  const fragment = document.createDocumentFragment();
   uploadedPhotos.forEach((file, index) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const card = document.createElement('article');
-      card.className = 'photo-preview-card';
-      card.innerHTML = `
-        <img src="${e.target.result}" alt="Move photo ${index + 1}">
-        <div class="photo-preview-meta">
-          <strong>${file.name}</strong>
-          <span>${formatFileSize(file.size)}</span>
-        </div>
-        <button class="remove-photo" data-index="${index}" aria-label="Remove this photo">×</button>
-      `;
-      photoEls.previewGrid.appendChild(card);
-    };
-    reader.readAsDataURL(file);
+    fragment.appendChild(createPhotoCard(file, index));
   });
-}
-
-function syncPhotoInput() {
-  if (!photoEls.upload) return;
-  const dt = new DataTransfer();
-  uploadedPhotos.forEach(file => dt.items.add(file));
-  photoEls.upload.files = dt.files;
+  photoEls.previewGrid.appendChild(fragment);
 }
 
 function removePhoto(index) {
+  if (index < 0 || index >= uploadedPhotos.length) return;
+
+  // Remove from array
   uploadedPhotos.splice(index, 1);
   syncPhotoInput();
-  renderPhotoPreviews();
-  renderPhotoSummary();
+
+  // Remove only that one card from DOM (this reduces flicker dramatically)
+  const cardToRemove = photoEls.previewGrid.querySelector(`.photo-preview-card[data-index="${index}"]`);
+  if (cardToRemove) {
+    cardToRemove.style.transition = 'opacity 180ms ease, transform 180ms ease';
+    cardToRemove.style.opacity = '0';
+    cardToRemove.style.transform = 'scale(0.95)';
+
+    setTimeout(() => {
+      cardToRemove.remove();
+
+      // Re-index remaining cards
+      const remainingCards = photoEls.previewGrid.querySelectorAll('.photo-preview-card');
+      remainingCards.forEach((card, newIndex) => {
+        card.dataset.index = String(newIndex);
+        const removeBtn = card.querySelector('.remove-photo');
+        if (removeBtn) removeBtn.dataset.index = String(newIndex);
+        const img = card.querySelector('img');
+        if (img) img.alt = `Move photo ${newIndex + 1}`;
+      });
+
+      renderPhotoSummary();
+    }, 180);
+  } else {
+    // Fallback
+    renderPhotoPreviews();
+    renderPhotoSummary();
+  }
 }
 
 function handleFiles(fileList) {
@@ -230,10 +295,9 @@ function handleFiles(fileList) {
 
   if (newFiles.length === 0) return;
 
-  // === LIMITS ===
   let filesToAdd = newFiles;
 
-  // Per-file size limit
+  // Per file size limit
   filesToAdd = filesToAdd.filter(file => {
     const sizeMB = file.size / (1024 * 1024);
     if (sizeMB > PHOTO_LIMITS.maxFileSizeMB) {
@@ -243,13 +307,11 @@ function handleFiles(fileList) {
     return true;
   });
 
-  // Total file count limit
   if (uploadedPhotos.length + filesToAdd.length > PHOTO_LIMITS.maxFiles) {
-    alert(`You can upload a maximum of ${PHOTO_LIMITS.maxFiles} photos at once.`);
+    alert(`You can upload a maximum of ${PHOTO_LIMITS.maxFiles} photos total.`);
     filesToAdd = filesToAdd.slice(0, PHOTO_LIMITS.maxFiles - uploadedPhotos.length);
   }
 
-  // Total size limit (rough check)
   const currentTotalMB = uploadedPhotos.reduce((sum, f) => sum + f.size, 0) / (1024 * 1024);
   const addedMB = filesToAdd.reduce((sum, f) => sum + f.size, 0) / (1024 * 1024);
   if (currentTotalMB + addedMB > PHOTO_LIMITS.maxTotalSizeMB) {
@@ -259,70 +321,90 @@ function handleFiles(fileList) {
 
   if (filesToAdd.length === 0) return;
 
+  const startIndex = uploadedPhotos.length;
   uploadedPhotos.push(...filesToAdd);
+
   syncPhotoInput();
-  renderPhotoPreviews();
+
+  // Append new cards without full rebuild
+  const fragment = document.createDocumentFragment();
+  filesToAdd.forEach((file, offset) => {
+    fragment.appendChild(createPhotoCard(file, startIndex + offset));
+  });
+  photoEls.previewGrid.appendChild(fragment);
+
   renderPhotoSummary();
 }
 
-// ====================== INIT FUNCTIONS ======================
+// ====================== INIT ======================
 function initEstimator() {
   const debouncedCalc = debounce(calculateEstimate);
 
   [els.moveSize, els.movers, els.packingHelp, els.specialty, ...els.addons]
     .filter(Boolean)
-    .forEach(el => el.addEventListener('change', calculateEstimate));
+    .forEach((el) => el.addEventListener('change', calculateEstimate));
 
   [els.hours, els.miles, els.truckFee, els.travelFee]
     .filter(Boolean)
-    .forEach(el => el.addEventListener('input', debouncedCalc));
+    .forEach((el) => el.addEventListener('input', debouncedCalc));
 
   els.recalculateBtn?.addEventListener('click', calculateEstimate);
   els.resetBtn?.addEventListener('click', resetEstimator);
 
-  els.year && (els.year.textContent = new Date().getFullYear());
+  if (els.year) {
+    els.year.textContent = new Date().getFullYear();
+  }
 }
 
 function initPhotoUpload() {
   if (!photoEls.upload || !photoEls.dropzone) return;
 
-  photoEls.upload.addEventListener('change', e => e.target.files && handleFiles(e.target.files));
+  photoEls.upload.addEventListener('change', (e) => {
+    if (e.target.files) handleFiles(e.target.files);
+  });
 
   const dz = photoEls.dropzone;
-  ['dragenter', 'dragover'].forEach(ev => dz.addEventListener(ev, e => { 
-    e.preventDefault(); 
-    dz.classList.add('dragover'); 
-  }));
 
-  ['dragleave', 'drop'].forEach(ev => dz.addEventListener(ev, e => { 
-    e.preventDefault(); 
-    dz.classList.remove('dragover'); 
-  }));
+  ['dragenter', 'dragover'].forEach((ev) => {
+    dz.addEventListener(ev, (e) => {
+      e.preventDefault();
+      dz.classList.add('dragover');
+    });
+  });
 
-  dz.addEventListener('drop', e => {
+  ['dragleave', 'drop'].forEach((ev) => {
+    dz.addEventListener(ev, (e) => {
+      e.preventDefault();
+      dz.classList.remove('dragover');
+    });
+  });
+
+  dz.addEventListener('drop', (e) => {
     if (e.dataTransfer?.files) handleFiles(e.dataTransfer.files);
   });
 
-  // Remove photo (event delegation)
+  // Safer remove button handler
   document.addEventListener('click', (e) => {
-    if (e.target.classList.contains('remove-photo')) {
-      const idx = parseInt(e.target.dataset.index, 10);
-      if (!isNaN(idx)) removePhoto(idx);
+    const target = e.target;
+    if (!(target instanceof HTMLElement)) return;
+
+    if (target.classList.contains('remove-photo')) {
+      const idx = Number.parseInt(target.dataset.index || '', 10);
+      if (!Number.isNaN(idx)) removePhoto(idx);
     }
   });
 }
 
 function initScrollReveal() {
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
       if (entry.isIntersecting) entry.target.classList.add('visible');
     });
   }, { threshold: 0.15 });
 
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
 }
 
-// ====================== START ======================
 function init() {
   initEstimator();
   initPhotoUpload();

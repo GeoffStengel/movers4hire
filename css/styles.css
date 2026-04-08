@@ -1012,7 +1012,34 @@
 
 .photo-preview-card:hover .remove-photo {
   display: flex;
-}  
+}
+
+/*test start for images and maps to flow smoother on delete of img*/
+/* PHOTO PREVIEW + MAP FLICKER FIXES */
+.photo-preview-card {
+  transition: opacity 180ms ease, transform 180ms ease;
+  will-change: opacity, transform; /* Helps with smooth removal animation */
+}
+
+/* Map iframe stability */
+.map-embed-card,
+.map-embed-card iframe {
+  contain: layout paint;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+#service-map {
+  position: relative;
+  z-index: 1;
+}
+
+/* Optional: make removal feel nicer */
+.photo-preview-card.removing {
+  opacity: 0;
+  transform: scale(0.95);
+}
+/*test end for images and maps to flow smoother on delete of img*/
 /*PHOTO END*/
 
 .map-embed-card {
