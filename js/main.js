@@ -470,115 +470,132 @@ function generatePDF() {
   const truckFeeText = els.truckFee?.value ? currency(Number(els.truckFee.value)) : '$0';
   const travelFeeText = els.travelFee?.value ? currency(Number(els.travelFee.value)) : '$0';
 
-  doc.setFillColor(...brandBlue);
-  doc.rect(0, 0, pageWidth, 105, 'F');
+  const drawHeader = () => {
+    doc.setFillColor(...brandBlue);
+    doc.rect(0, 0, pageWidth, 90, 'F');
 
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(22);
+    doc.setTextColor(255, 255, 255);
+    doc.text('Movers4Hire', margin, 32);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.text('Eugene, Oregon • Professional Moving Services', margin, 50);
+    doc.text('(541) 555-0199 • hello@movers4hire.com', margin, 64);
+
+    doc.setFontSize(9);
+    doc.text(`Estimate Date: ${today}`, pageWidth - margin, 32, { align: 'right' });
+    doc.text(`Estimate ID: ${estimateId}`, pageWidth - margin, 50, { align: 'right' });
+
+    doc.setFillColor(...brandTeal);
+    doc.rect(0, 90, pageWidth, 6, 'F');
+  };
+
+  const drawFooter = () => {
+    const footerY = pageHeight - 50;
+
+    doc.setDrawColor(220, 226, 232);
+    doc.line(margin, footerY - 12, pageWidth - margin, footerY - 12);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.setTextColor(...mutedText);
+    doc.text(
+      'Preliminary estimate. Final pricing may vary based on actual inventory and conditions.',
+      margin,
+      footerY
+    );
+
+    doc.text(
+      'Movers4Hire • Eugene, Oregon',
+      pageWidth / 2,
+      pageHeight - 18,
+      { align: 'center' }
+    );
+  };
+
+  const ensureSpace = (needed, y) => {
+    if (y + needed > pageHeight - 80) {
+      drawFooter();
+      doc.addPage();
+      drawHeader();
+      return 115;
+    }
+    return y;
+  };
+
+  drawHeader();
+
+  let y = 115;
+
+  // ================= SIDE BY SIDE TABLES =================
+  const columnGap = 14;
+  const usableWidth = pageWidth - margin * 2;
+  const colWidth = (usableWidth - columnGap) / 2;
+
+  // LEFT: Customer Info
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(24);
-  doc.setTextColor(255, 255, 255);
-  doc.text('Movers4Hire', margin, 38);
-
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(11);
-  doc.text('Eugene, Oregon • Professional Moving Services', margin, 58);
-  doc.text('(541) 555-0199 • hello@movers4hire.com', margin, 76);
-
-  doc.setFontSize(10);
-  doc.text(`Estimate Date: ${today}`, pageWidth - margin, 38, { align: 'right' });
-  doc.text(`Estimate ID: ${estimateId}`, pageWidth - margin, 58, { align: 'right' });
-
-  doc.setFillColor(...brandTeal);
-  doc.rect(0, 105, pageWidth, 8, 'F');
-
-  let y = 145;
-
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(14);
+  doc.setFontSize(13);
   doc.setTextColor(...brandBlue);
   doc.text('Customer Information', margin, y);
 
-  y += 12;
-
   doc.autoTable({
-    startY: y,
+    startY: y + 6,
     theme: 'grid',
     head: [['Field', 'Value']],
     body: [
-      ['Customer Name', customerName],
-      ['Customer Email', customerEmail],
-      ['Preferred Move Date', moveDate],
+      ['Name', customerName],
+      ['Email', customerEmail],
+      ['Move Date', moveDate],
       ['Origin', originAddress],
       ['Destination', destinationAddress]
     ],
-    styles: {
-      font: 'helvetica',
-      fontSize: 10,
-      cellPadding: 6,
-      textColor: darkText,
-      lineColor: [225, 230, 236],
-      lineWidth: 0.6
-    },
-    headStyles: {
-      fillColor: brandTeal,
-      textColor: [255, 255, 255],
-      fontStyle: 'bold'
-    },
-    columnStyles: {
-      0: { fontStyle: 'bold', cellWidth: 170 },
-      1: { cellWidth: 285 }
-    },
-    margin: { left: margin, right: margin }
+    tableWidth: colWidth,
+    margin: { left: margin },
+    styles: { fontSize: 9, cellPadding: 5 },
+    headStyles: { fillColor: brandTeal }
   });
 
-  y = doc.lastAutoTable.finalY + 24;
+  const leftEndY = doc.lastAutoTable.finalY;
 
+  // RIGHT: Move Details
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(14);
+  doc.setFontSize(13);
   doc.setTextColor(...brandBlue);
-  doc.text('Move Details', margin, y);
-
-  y += 12;
+  doc.text('Move Details', margin + colWidth + columnGap, y);
 
   doc.autoTable({
-    startY: y,
+    startY: y + 6,
     theme: 'grid',
     head: [['Detail', 'Value']],
     body: [
       ['Move Size', moveSizeText],
-      ['Crew Size', moversText],
-      ['Estimated Labor Hours', hoursText],
-      ['Mileage', milesText],
+      ['Crew', moversText],
+      ['Hours', hoursText],
+      ['Miles', milesText],
       ['Truck Fee', truckFeeText],
-      ['Travel / Dispatch Fee', travelFeeText]
+      ['Travel Fee', travelFeeText]
     ],
-    styles: {
-      font: 'helvetica',
-      fontSize: 10,
-      cellPadding: 6,
-      textColor: darkText,
-      lineColor: [225, 230, 236],
-      lineWidth: 0.6
-    },
-    headStyles: {
-      fillColor: brandTeal,
-      textColor: [255, 255, 255],
-      fontStyle: 'bold'
-    },
-    columnStyles: {
-      0: { fontStyle: 'bold', cellWidth: 170 },
-      1: { cellWidth: 285 }
-    },
-    margin: { left: margin, right: margin }
+    tableWidth: colWidth,
+    margin: { left: margin + colWidth + columnGap },
+    styles: { fontSize: 9, cellPadding: 5 },
+    headStyles: { fillColor: brandTeal }
   });
 
-  y = doc.lastAutoTable.finalY + 24;
+  const rightEndY = doc.lastAutoTable.finalY;
+
+  y = Math.max(leftEndY, rightEndY) + 20;
+
+  // ================= COST BREAKDOWN =================
+  y = ensureSpace(120, y);
 
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(14);
+  doc.setFontSize(13);
   doc.setTextColor(...brandBlue);
   doc.text('Cost Breakdown', margin, y);
 
-  y += 12;
+  y += 10;
 
   const breakdownRows = [];
   els.breakdown.querySelectorAll('.summary-row').forEach((row) => {
@@ -591,101 +608,40 @@ function generatePDF() {
     }
   });
 
-  if (breakdownRows.length === 0) {
-    breakdownRows.push(['Estimate not available', '$0']);
-  }
-
   doc.autoTable({
     startY: y,
     theme: 'striped',
     head: [['Description', 'Amount']],
     body: breakdownRows,
-    styles: {
-      font: 'helvetica',
-      fontSize: 10,
-      cellPadding: 6,
-      textColor: darkText
-    },
-    headStyles: {
-      fillColor: brandTeal,
-      textColor: [255, 255, 255],
-      fontStyle: 'bold'
-    },
-    alternateRowStyles: {
-      fillColor: lightGray
-    },
-    columnStyles: {
-      0: { cellWidth: 340 },
-      1: { halign: 'right', cellWidth: 115, fontStyle: 'bold' }
-    },
-    margin: { left: margin, right: margin }
+    styles: { fontSize: 9, cellPadding: 5 },
+    headStyles: { fillColor: brandTeal },
+    alternateRowStyles: { fillColor: lightGray }
   });
 
-  y = doc.lastAutoTable.finalY + 24;
+  y = doc.lastAutoTable.finalY + 18;
 
-  const totalBoxHeight = 74;
-  const totalBoxY = y;
-  const totalBoxX = margin;
-  const totalBoxWidth = pageWidth - margin * 2;
+  // ================= TOTAL =================
+  y = ensureSpace(70, y);
 
   doc.setFillColor(248, 250, 252);
   doc.setDrawColor(...brandTeal);
-  doc.setLineWidth(1.2);
-  doc.roundedRect(totalBoxX, totalBoxY, totalBoxWidth, totalBoxHeight, 10, 10, 'FD');
+  doc.roundedRect(margin, y, pageWidth - margin * 2, 65, 10, 10, 'FD');
 
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(15);
+  doc.setFontSize(14);
   doc.setTextColor(...darkText);
-  doc.text('Estimated Grand Total', totalBoxX + 18, totalBoxY + 28);
+  doc.text('Estimated Total', margin + 15, y + 26);
 
-  doc.setFontSize(28);
+  doc.setFontSize(26);
   doc.setTextColor(...brandBlue);
-  doc.text(els.estimateTotal?.textContent || '$0', totalBoxX + totalBoxWidth - 18, totalBoxY + 44, {
-    align: 'right'
-  });
-
-  y = totalBoxY + totalBoxHeight + 24;
-
-  if (uploadedPhotos.length > 0) {
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(12);
-    doc.setTextColor(...brandBlue);
-    doc.text('Photo-Assisted Estimate', margin, y);
-
-    y += 15;
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(10);
-    doc.setTextColor(...mutedText);
-    doc.text(
-      `This estimate was supported by ${uploadedPhotos.length} uploaded photo${uploadedPhotos.length > 1 ? 's' : ''}.`,
-      margin,
-      y
-    );
-  }
-
-  const footerY = pageHeight - 58;
-
-  doc.setDrawColor(220, 226, 232);
-  doc.setLineWidth(0.8);
-  doc.line(margin, footerY - 16, pageWidth - margin, footerY - 16);
-
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(9);
-  doc.setTextColor(...mutedText);
   doc.text(
-    'This is a preliminary estimate only. Final pricing may vary based on actual inventory, access conditions, packing status, and services requested.',
-    margin,
-    footerY,
-    { maxWidth: pageWidth - margin * 2 }
+    els.estimateTotal.textContent,
+    pageWidth - margin - 15,
+    y + 42,
+    { align: 'right' }
   );
 
-  doc.setFontSize(8);
-  doc.text(
-    'Movers4Hire • Eugene, Oregon • (541) 555-0199 • hello@movers4hire.com',
-    pageWidth / 2,
-    pageHeight - 20,
-    { align: 'center' }
-  );
+  drawFooter();
 
   doc.save(`Movers4Hire_Estimate_${estimateId}.pdf`);
 }
