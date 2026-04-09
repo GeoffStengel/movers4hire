@@ -263,6 +263,51 @@
             </div>
           </div>
 
+            <!-- CUSTOMER INFO START -->
+<div class="form-grid">
+  <div class="field">
+    <div class="label-row">
+      <label for="customerName">Customer name</label>
+      <span class="help-pill">For the quote</span>
+    </div>
+    <input id="customerName" type="text" placeholder="Full name" />
+  </div>
+
+  <div class="field">
+    <div class="label-row">
+      <label for="customerEmail">Customer email</label>
+      <span class="help-pill">Optional</span>
+    </div>
+    <input id="customerEmail" type="email" placeholder="name@email.com" />
+  </div>
+
+  <div class="field">
+    <div class="label-row">
+      <label for="moveDate">Preferred move date</label>
+      <span class="help-pill">Scheduling</span>
+    </div>
+    <input id="moveDate" type="date" />
+  </div>
+
+  <div class="field">
+    <div class="label-row">
+      <label for="originAddress">Move origin</label>
+      <span class="help-pill">Starting point</span>
+    </div>
+    <input id="originAddress" type="text" placeholder="Current address or city" />
+  </div>
+
+  <div class="field">
+    <div class="label-row">
+      <label for="destinationAddress">Move destination</label>
+      <span class="help-pill">Ending point</span>
+    </div>
+    <input id="destinationAddress" type="text" placeholder="New address or city" />
+  </div>
+</div>
+<!-- CUSTOMER INFO END -->
+
+
           <div class="form-grid">
             <div class="field">
               <div class="label-row">
@@ -668,41 +713,13 @@
     </footer>
   </div>
 
-  <!--PDF START-->
- 
-<!-- PDF TEMPLATE - Hidden -->
- <!---
-<div id="pdfTemplate" style="display: none;">
-  <div id="pdfContent" style="width: 800px; padding: 50px 60px; background: white; color: #111111; font-family: Arial, sans-serif;">
-    
-    <h1 style="color: #1e3a8a; text-align: center; margin-bottom: 10px;">Movers4Hire Estimate</h1>
-    <p style="text-align: center; color: #555;" id="pdfDate"></p>
 
-    <h2 style="color: #1e3a8a; margin-top: 40px;">Move Details</h2>
-    <table style="width: 100%; margin: 20px 0; border-collapse: collapse;" id="pdfDetails"></table>
-
-    <h2 style="color: #1e3a8a; margin-top: 40px;">Cost Breakdown</h2>
-    <div id="pdfBreakdown" style="margin: 25px 0;"></div>
-
-    <div style="margin-top: 50px; text-align: right; border-top: 4px solid #4fd1c5; padding-top: 25px;">
-      <strong style="font-size: 1.4rem; color: #444;">Grand Total</strong><br>
-      <span id="pdfTotal" style="font-size: 42px; font-weight: bold; color: #1e3a8a;"></span>
-    </div>
-
-    <p style="margin-top: 60px; font-size: 0.95rem; color: #666; text-align: center;">
-      * This is a preliminary estimate only. Final cost may vary based on actual conditions.
-    </p>
-  </div>
-</div> -->
-<!--PDF END-->
 
 
     <script src="js/main.js"></script>
-    <!--PDF SCRIPT START-->
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script> -->
-
+    <!--PDF CDN START-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
-    <!--PDF SCRIPT END-->
+    <!--PDF CDN END-->
 </body>
 </html>

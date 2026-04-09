@@ -1,4 +1,4 @@
-// main.js - Movers4Hire | Estimator + Photo Upload (Final)
+// main.js - Movers4Hire | Estimator + Photo Upload + Branded PDF
 
 // ====================== PRICING CONFIG ======================
 const pricingConfig = {
@@ -29,6 +29,12 @@ const els = {
   packingHelp: document.getElementById('packingHelp'),
   specialty: document.getElementById('specialty'),
   addons: Array.from(document.querySelectorAll('.addon')),
+
+  customerName: document.getElementById('customerName'),
+  customerEmail: document.getElementById('customerEmail'),
+  moveDate: document.getElementById('moveDate'),
+  originAddress: document.getElementById('originAddress'),
+  destinationAddress: document.getElementById('destinationAddress'),
 
   estimateTotal: document.getElementById('estimateTotal'),
   grandTotalRow: document.getElementById('grandTotalRow'),
@@ -70,6 +76,23 @@ const debounce = (fn, delay = 280) => {
     timeout = setTimeout(() => fn(...args), delay);
   };
 };
+
+function safeValue(value, fallback = 'Not provided') {
+  return value && String(value).trim() ? String(value).trim() : fallback;
+}
+
+function formatDisplayDate(dateValue) {
+  if (!dateValue) return 'Not provided';
+
+  const parsed = new Date(`${dateValue}T00:00:00`);
+  if (Number.isNaN(parsed.getTime())) return dateValue;
+
+  return parsed.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}
 
 // ====================== ESTIMATOR ======================
 function getEstimatedHours(size, inputHours) {
@@ -167,6 +190,7 @@ function resetEstimator() {
 
   els.moveSize.value = 'studio';
   if (els.movers) els.movers.value = '3';
+  if (els.hours) els.hours.value = pricingConfig.minimumHours.studio;
   if (els.miles) els.miles.value = '12';
   if (els.truckFee) els.truckFee.value = '95';
   if (els.travelFee) els.travelFee.value = '45';
@@ -174,9 +198,11 @@ function resetEstimator() {
   if (els.specialty) els.specialty.checked = false;
   (els.addons || []).forEach((addon) => { addon.checked = false; });
 
-  if (els.hours) {
-    els.hours.value = pricingConfig.minimumHours.studio;
-  }
+  if (els.customerName) els.customerName.value = '';
+  if (els.customerEmail) els.customerEmail.value = '';
+  if (els.moveDate) els.moveDate.value = '';
+  if (els.originAddress) els.originAddress.value = '';
+  if (els.destinationAddress) els.destinationAddress.value = '';
 
   calculateEstimate();
 }
@@ -196,10 +222,11 @@ function getConfidenceData(count) {
 
 function renderPhotoSummary() {
   if (!photoEls.count) return;
+
   const totalBytes = uploadedPhotos.reduce((sum, f) => sum + f.size, 0);
   const conf = getConfidenceData(uploadedPhotos.length);
 
-  photoEls.count.textContent = uploadedPhotos.length;
+  photoEls.count.textContent = String(uploadedPhotos.length);
   if (photoEls.size) photoEls.size.textContent = formatFileSize(totalBytes);
   if (photoEls.confidenceLevel) photoEls.confidenceLevel.textContent = conf.level;
   if (photoEls.guidance) photoEls.guidance.textContent = conf.guidance;
@@ -208,6 +235,7 @@ function renderPhotoSummary() {
 
 function syncPhotoInput() {
   if (!photoEls.upload) return;
+
   try {
     const dt = new DataTransfer();
     uploadedPhotos.forEach(file => dt.items.add(file));
@@ -233,7 +261,9 @@ function createPhotoCard(file, index) {
 
   const img = card.querySelector('img');
   const reader = new FileReader();
-  reader.onload = (e) => { img.src = e.target.result || ''; };
+  reader.onload = (e) => {
+    img.src = e.target?.result || '';
+  };
   reader.readAsDataURL(file);
 
   return card;
@@ -252,13 +282,13 @@ function renderPhotoPreviews() {
 
 function removePhoto(index) {
   if (index < 0 || index >= uploadedPhotos.length) return;
+  if (!photoEls.previewGrid) return;
 
-  // Remove from array
   uploadedPhotos.splice(index, 1);
   syncPhotoInput();
 
-  // Remove only that one card from DOM (this reduces flicker dramatically)
   const cardToRemove = photoEls.previewGrid.querySelector(`.photo-preview-card[data-index="${index}"]`);
+
   if (cardToRemove) {
     cardToRemove.style.transition = 'opacity 180ms ease, transform 180ms ease';
     cardToRemove.style.opacity = '0';
@@ -267,12 +297,13 @@ function removePhoto(index) {
     setTimeout(() => {
       cardToRemove.remove();
 
-      // Re-index remaining cards
       const remainingCards = photoEls.previewGrid.querySelectorAll('.photo-preview-card');
       remainingCards.forEach((card, newIndex) => {
         card.dataset.index = String(newIndex);
+
         const removeBtn = card.querySelector('.remove-photo');
         if (removeBtn) removeBtn.dataset.index = String(newIndex);
+
         const img = card.querySelector('img');
         if (img) img.alt = `Move photo ${newIndex + 1}`;
       });
@@ -280,7 +311,6 @@ function removePhoto(index) {
       renderPhotoSummary();
     }, 180);
   } else {
-    // Fallback
     renderPhotoPreviews();
     renderPhotoSummary();
   }
@@ -289,15 +319,16 @@ function removePhoto(index) {
 function handleFiles(fileList) {
   const valid = Array.from(fileList).filter(f => f.type.startsWith('image/'));
 
-  const newFiles = valid.filter(f => !uploadedPhotos.some(ex => 
-    ex.name === f.name && ex.size === f.size && ex.lastModified === f.lastModified
+  const newFiles = valid.filter(f => !uploadedPhotos.some(ex =>
+    ex.name === f.name &&
+    ex.size === f.size &&
+    ex.lastModified === f.lastModified
   ));
 
   if (newFiles.length === 0) return;
 
   let filesToAdd = newFiles;
 
-  // Per file size limit
   filesToAdd = filesToAdd.filter(file => {
     const sizeMB = file.size / (1024 * 1024);
     if (sizeMB > PHOTO_LIMITS.maxFileSizeMB) {
@@ -314,6 +345,7 @@ function handleFiles(fileList) {
 
   const currentTotalMB = uploadedPhotos.reduce((sum, f) => sum + f.size, 0) / (1024 * 1024);
   const addedMB = filesToAdd.reduce((sum, f) => sum + f.size, 0) / (1024 * 1024);
+
   if (currentTotalMB + addedMB > PHOTO_LIMITS.maxTotalSizeMB) {
     alert(`Total upload size would exceed ${PHOTO_LIMITS.maxTotalSizeMB} MB. Please remove some photos.`);
     return;
@@ -323,20 +355,342 @@ function handleFiles(fileList) {
 
   const startIndex = uploadedPhotos.length;
   uploadedPhotos.push(...filesToAdd);
-
   syncPhotoInput();
 
-  // Append new cards without full rebuild
-  const fragment = document.createDocumentFragment();
-  filesToAdd.forEach((file, offset) => {
-    fragment.appendChild(createPhotoCard(file, startIndex + offset));
-  });
-  photoEls.previewGrid.appendChild(fragment);
+  if (photoEls.previewGrid) {
+    const fragment = document.createDocumentFragment();
+    filesToAdd.forEach((file, offset) => {
+      fragment.appendChild(createPhotoCard(file, startIndex + offset));
+    });
+    photoEls.previewGrid.appendChild(fragment);
+  }
 
   renderPhotoSummary();
 }
 
-// ====================== INIT ======================
+// ====================== SCROLL REVEAL ======================
+function initScrollReveal() {
+  const revealEls = document.querySelectorAll('.reveal');
+  if (!revealEls.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.15 });
+
+  revealEls.forEach((el) => observer.observe(el));
+}
+
+// ====================== HAMBURGER MENU ======================
+function initHamburger() {
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  if (!hamburger || !mobileMenu) return;
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = hamburger.classList.toggle('active');
+    mobileMenu.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', String(isOpen));
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+
+  const mobileLinks = mobileMenu.querySelectorAll('a');
+  mobileLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('active');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+      hamburger.classList.remove('active');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+      hamburger.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
+
+// ====================== PDF GENERATION - BRANDED ======================
+function generateEstimateId() {
+  const datePart = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+  const randomPart = Math.floor(1000 + Math.random() * 9000);
+  return `M4H-${datePart}-${randomPart}`;
+}
+
+function generatePDF() {
+  if (!els.estimateTotal || !els.breakdown) {
+    alert('Please calculate an estimate first.');
+    return;
+  }
+
+  if (!window.jspdf?.jsPDF) {
+    alert('PDF library failed to load.');
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'pt', format: 'letter' });
+
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const margin = 40;
+
+  const brandBlue = [30, 58, 138];
+  const brandTeal = [79, 209, 197];
+  const darkText = [35, 35, 35];
+  const mutedText = [110, 110, 110];
+  const lightGray = [245, 247, 250];
+
+  const today = new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+
+  const estimateId = generateEstimateId();
+
+  const moveSizeText =
+    els.moveSize?.options[els.moveSize.selectedIndex]?.text || 'Not selected';
+
+  const customerName = safeValue(els.customerName?.value, 'Customer');
+  const customerEmail = safeValue(els.customerEmail?.value);
+  const moveDate = formatDisplayDate(els.moveDate?.value);
+  const originAddress = safeValue(els.originAddress?.value);
+  const destinationAddress = safeValue(els.destinationAddress?.value);
+
+  const moversText = `${els.movers?.value || '0'} movers`;
+  const hoursText = `${els.hours?.value || '0'} hrs`;
+  const milesText = `${els.miles?.value || '0'} mi`;
+  const truckFeeText = els.truckFee?.value ? currency(Number(els.truckFee.value)) : '$0';
+  const travelFeeText = els.travelFee?.value ? currency(Number(els.travelFee.value)) : '$0';
+
+  doc.setFillColor(...brandBlue);
+  doc.rect(0, 0, pageWidth, 105, 'F');
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(24);
+  doc.setTextColor(255, 255, 255);
+  doc.text('Movers4Hire', margin, 38);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(11);
+  doc.text('Eugene, Oregon • Professional Moving Services', margin, 58);
+  doc.text('(541) 555-0199 • hello@movers4hire.com', margin, 76);
+
+  doc.setFontSize(10);
+  doc.text(`Estimate Date: ${today}`, pageWidth - margin, 38, { align: 'right' });
+  doc.text(`Estimate ID: ${estimateId}`, pageWidth - margin, 58, { align: 'right' });
+
+  doc.setFillColor(...brandTeal);
+  doc.rect(0, 105, pageWidth, 8, 'F');
+
+  let y = 145;
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.setTextColor(...brandBlue);
+  doc.text('Customer Information', margin, y);
+
+  y += 12;
+
+  doc.autoTable({
+    startY: y,
+    theme: 'grid',
+    head: [['Field', 'Value']],
+    body: [
+      ['Customer Name', customerName],
+      ['Customer Email', customerEmail],
+      ['Preferred Move Date', moveDate],
+      ['Origin', originAddress],
+      ['Destination', destinationAddress]
+    ],
+    styles: {
+      font: 'helvetica',
+      fontSize: 10,
+      cellPadding: 6,
+      textColor: darkText,
+      lineColor: [225, 230, 236],
+      lineWidth: 0.6
+    },
+    headStyles: {
+      fillColor: brandTeal,
+      textColor: [255, 255, 255],
+      fontStyle: 'bold'
+    },
+    columnStyles: {
+      0: { fontStyle: 'bold', cellWidth: 170 },
+      1: { cellWidth: 285 }
+    },
+    margin: { left: margin, right: margin }
+  });
+
+  y = doc.lastAutoTable.finalY + 24;
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.setTextColor(...brandBlue);
+  doc.text('Move Details', margin, y);
+
+  y += 12;
+
+  doc.autoTable({
+    startY: y,
+    theme: 'grid',
+    head: [['Detail', 'Value']],
+    body: [
+      ['Move Size', moveSizeText],
+      ['Crew Size', moversText],
+      ['Estimated Labor Hours', hoursText],
+      ['Mileage', milesText],
+      ['Truck Fee', truckFeeText],
+      ['Travel / Dispatch Fee', travelFeeText]
+    ],
+    styles: {
+      font: 'helvetica',
+      fontSize: 10,
+      cellPadding: 6,
+      textColor: darkText,
+      lineColor: [225, 230, 236],
+      lineWidth: 0.6
+    },
+    headStyles: {
+      fillColor: brandTeal,
+      textColor: [255, 255, 255],
+      fontStyle: 'bold'
+    },
+    columnStyles: {
+      0: { fontStyle: 'bold', cellWidth: 170 },
+      1: { cellWidth: 285 }
+    },
+    margin: { left: margin, right: margin }
+  });
+
+  y = doc.lastAutoTable.finalY + 24;
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.setTextColor(...brandBlue);
+  doc.text('Cost Breakdown', margin, y);
+
+  y += 12;
+
+  const breakdownRows = [];
+  els.breakdown.querySelectorAll('.summary-row').forEach((row) => {
+    const spans = row.querySelectorAll('span');
+    if (spans.length >= 2) {
+      breakdownRows.push([
+        spans[0].textContent.trim(),
+        spans[1].textContent.trim()
+      ]);
+    }
+  });
+
+  if (breakdownRows.length === 0) {
+    breakdownRows.push(['Estimate not available', '$0']);
+  }
+
+  doc.autoTable({
+    startY: y,
+    theme: 'striped',
+    head: [['Description', 'Amount']],
+    body: breakdownRows,
+    styles: {
+      font: 'helvetica',
+      fontSize: 10,
+      cellPadding: 6,
+      textColor: darkText
+    },
+    headStyles: {
+      fillColor: brandTeal,
+      textColor: [255, 255, 255],
+      fontStyle: 'bold'
+    },
+    alternateRowStyles: {
+      fillColor: lightGray
+    },
+    columnStyles: {
+      0: { cellWidth: 340 },
+      1: { halign: 'right', cellWidth: 115, fontStyle: 'bold' }
+    },
+    margin: { left: margin, right: margin }
+  });
+
+  y = doc.lastAutoTable.finalY + 24;
+
+  const totalBoxHeight = 74;
+  const totalBoxY = y;
+  const totalBoxX = margin;
+  const totalBoxWidth = pageWidth - margin * 2;
+
+  doc.setFillColor(248, 250, 252);
+  doc.setDrawColor(...brandTeal);
+  doc.setLineWidth(1.2);
+  doc.roundedRect(totalBoxX, totalBoxY, totalBoxWidth, totalBoxHeight, 10, 10, 'FD');
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(15);
+  doc.setTextColor(...darkText);
+  doc.text('Estimated Grand Total', totalBoxX + 18, totalBoxY + 28);
+
+  doc.setFontSize(28);
+  doc.setTextColor(...brandBlue);
+  doc.text(els.estimateTotal?.textContent || '$0', totalBoxX + totalBoxWidth - 18, totalBoxY + 44, {
+    align: 'right'
+  });
+
+  y = totalBoxY + totalBoxHeight + 24;
+
+  if (uploadedPhotos.length > 0) {
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(12);
+    doc.setTextColor(...brandBlue);
+    doc.text('Photo-Assisted Estimate', margin, y);
+
+    y += 15;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(...mutedText);
+    doc.text(
+      `This estimate was supported by ${uploadedPhotos.length} uploaded photo${uploadedPhotos.length > 1 ? 's' : ''}.`,
+      margin,
+      y
+    );
+  }
+
+  const footerY = pageHeight - 58;
+
+  doc.setDrawColor(220, 226, 232);
+  doc.setLineWidth(0.8);
+  doc.line(margin, footerY - 16, pageWidth - margin, footerY - 16);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.setTextColor(...mutedText);
+  doc.text(
+    'This is a preliminary estimate only. Final pricing may vary based on actual inventory, access conditions, packing status, and services requested.',
+    margin,
+    footerY,
+    { maxWidth: pageWidth - margin * 2 }
+  );
+
+  doc.setFontSize(8);
+  doc.text(
+    'Movers4Hire • Eugene, Oregon • (541) 555-0199 • hello@movers4hire.com',
+    pageWidth / 2,
+    pageHeight - 20,
+    { align: 'center' }
+  );
+
+  doc.save(`Movers4Hire_Estimate_${estimateId}.pdf`);
+}
+
+// ====================== INIT HELPERS ======================
 function initEstimator() {
   const debouncedCalc = debounce(calculateEstimate);
 
@@ -383,7 +737,6 @@ function initPhotoUpload() {
     if (e.dataTransfer?.files) handleFiles(e.dataTransfer.files);
   });
 
-  // Safer remove button handler
   document.addEventListener('click', (e) => {
     const target = e.target;
     if (!(target instanceof HTMLElement)) return;
@@ -395,191 +748,18 @@ function initPhotoUpload() {
   });
 }
 
-function initScrollReveal() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) entry.target.classList.add('visible');
-    });
-  }, { threshold: 0.15 });
-
-  document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+function initPdfButton() {
+  document.getElementById('downloadPdfBtn')?.addEventListener('click', generatePDF);
 }
 
-// test hamurger start
-// ====================== HAMBURGER MENU ======================
-function initHamburger() {
-  const hamburger = document.getElementById('hamburger');
-  const mobileMenu = document.getElementById('mobileMenu');
-
-  if (!hamburger || !mobileMenu) return;
-
-  hamburger.addEventListener('click', () => {
-    const isOpen = hamburger.classList.toggle('active');
-    mobileMenu.classList.toggle('open');
-    
-    // Accessibility
-    hamburger.setAttribute('aria-expanded', isOpen);
-    
-    // Optional: prevent body scroll when menu is open
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-  });
-
-  // Close menu when clicking a link
-  const mobileLinks = mobileMenu.querySelectorAll('a');
-  mobileLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      hamburger.classList.remove('active');
-      mobileMenu.classList.remove('open');
-      document.body.style.overflow = '';
-      hamburger.setAttribute('aria-expanded', 'false');
-    });
-  });
-
-  // Close on Escape key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
-      hamburger.classList.remove('active');
-      mobileMenu.classList.remove('open');
-      document.body.style.overflow = '';
-      hamburger.setAttribute('aria-expanded', 'false');
-    }
-  });
-}
-// test hamburger end
-
-
-// ====================== PDF GENERATION - MINIMAL TEST ======================
-// ====================== COMPACT ONE-PAGE PDF ======================
-function generatePDF() {
-  if (!els.estimateTotal || !els.breakdown) {
-    alert("Please calculate an estimate first.");
-    return;
-  }
-
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  const pageWidth = doc.internal.pageSize.getWidth();
-
-  const today = new Date().toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  });
-
-  // Header
-  doc.setFontSize(24);
-  doc.setTextColor(30, 58, 138);
-  doc.text("Movers4Hire", pageWidth / 2, 22, { align: "center" });
-
-  doc.setFontSize(10);
-  doc.setTextColor(100, 100, 100);
-  doc.text("Eugene, Oregon • Professional Moving Services", pageWidth / 2, 30, { align: "center" });
-
-  doc.setFontSize(9);
-  doc.text(today, pageWidth - 25, 22, { align: "right" });
-
-  // Teal line
-  doc.setDrawColor(79, 209, 197);
-  doc.setLineWidth(0.8);
-  doc.line(20, 38, pageWidth - 20, 38);
-
-  let y = 52;
-
-  // Move Details (compact)
-  doc.setFontSize(14);
-  doc.setTextColor(30, 58, 138);
-  doc.text("Move Details", 20, y);
-  y += 10;
-
-  const moveSizeText = els.moveSize?.options[els.moveSize.selectedIndex]?.text || "Not selected";
-
-  const details = [
-    ["Move Size", moveSizeText],
-    ["Crew Size", (els.movers?.value || "3") + " movers"],
-    ["Est. Hours", (els.hours?.value || "0") + " hrs"],
-    ["Mileage", (els.miles?.value || "0") + " mi"]
-  ];
-
-  doc.autoTable({
-    startY: y,
-    head: [["Item", "Value"]],
-    body: details,
-    theme: 'striped',
-    styles: { fontSize: 10, cellPadding: 5 },
-    headStyles: { fillColor: [79, 209, 197], textColor: 255, fontSize: 10 },
-    columnStyles: { 0: { cellWidth: 70, fontStyle: 'bold' } }
-  });
-
-  y = doc.lastAutoTable.finalY + 18;
-
-  // Cost Breakdown (compact)
-  doc.setFontSize(14);
-  doc.setTextColor(30, 58, 138);
-  doc.text("Cost Breakdown", 20, y);
-  y += 10;
-
-  const breakdownRows = [];
-  els.breakdown.querySelectorAll('.summary-row').forEach(row => {
-    const spans = row.querySelectorAll('span');
-    if (spans.length >= 2) {
-      breakdownRows.push([
-        spans[0].textContent.trim(),
-        spans[1].textContent.trim()
-      ]);
-    }
-  });
-
-  doc.autoTable({
-    startY: y,
-    head: [["Description", "Amount"]],
-    body: breakdownRows,
-    theme: 'grid',
-    styles: { fontSize: 10, cellPadding: 5 },
-    headStyles: { fillColor: [79, 209, 197], textColor: 255 },
-    columnStyles: { 1: { halign: 'right', fontStyle: 'bold' } }
-  });
-
-  y = doc.lastAutoTable.finalY + 22;
-
-  // Grand Total (prominent)
-  doc.setDrawColor(79, 209, 197);
-  doc.setLineWidth(1);
-  doc.line(20, y, pageWidth - 20, y);
-
-  doc.setFontSize(16);
-  doc.text("Grand Total", 20, y + 15);
-
-  doc.setFontSize(29);
-  doc.setTextColor(30, 58, 138);
-  doc.text(els.estimateTotal.textContent || "$0", pageWidth - 25, y + 18, { align: "right" });
-
-  // Footer (compact)
-  doc.setFontSize(9);
-  doc.setTextColor(110, 110, 110);
-  const footerY = doc.internal.pageSize.getHeight() - 18;
-  doc.text("This is a preliminary estimate only. Final cost may vary.", 20, footerY, { maxWidth: pageWidth - 40 });
-
-  doc.setFontSize(8);
-  doc.text("Movers4Hire • Eugene, Oregon", pageWidth / 2, footerY + 8, { align: "center" });
-
-  // Save
-  doc.save(`Movers4Hire_Estimate_${new Date().toISOString().slice(0,10)}.pdf`);
-}
-
-// Button
-document.getElementById('downloadPdfBtn')?.addEventListener('click', generatePDF);
-// ========== PDF END =====================
-
+// ====================== START ======================
 function init() {
   initEstimator();
   initPhotoUpload();
   initScrollReveal();
   initHamburger();
-    
+  initPdfButton();
+
   calculateEstimate();
   renderPhotoSummary();
 }

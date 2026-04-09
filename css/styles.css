@@ -1179,9 +1179,15 @@
   margin-bottom: 8px;
 }
 
+/*test inside test*/
 .pdf-doc hr {
   margin: 15px 0;
 }
+
+.form-grid + .form-grid {
+  margin-top: 1rem;
+}
+/*test inside test*/
 /***PDF END***/
 
 @media (max-width: 1050px) {
