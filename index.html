@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css" />
   <title>📦 Movers4Hire | Eugene, Oregon Moving Company</title>
-
 </head>
 <body>
   <div class="grid-lines"></div>
@@ -13,7 +12,6 @@
   <div class="page">
     <nav class="nav">
       <div class="container nav-inner">
-        <!-- Brand -->
         <div class="brand">
           <div class="brand-badge"><a href="index.html">📦</a></div>
           <div>
@@ -22,7 +20,6 @@
           </div>
         </div>
 
-        <!-- Desktop Nav -->
         <div class="nav-links desktop-nav">
           <a href="#services">Services</a>
           <a href="#learn">Learn</a>
@@ -34,14 +31,12 @@
           <a class="btn btn-primary" href="#estimate">Get Estimate</a>
         </div>
 
-        <!-- Hamburger Button -->
-        <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" type="button">
           <span class="hamburger-line"></span>
           <span class="hamburger-line"></span>
           <span class="hamburger-line"></span>
         </button>
 
-        <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobileMenu">
           <div class="mobile-menu-inner">
             <a href="#services">Services</a>
@@ -239,225 +234,353 @@
       </div>
     </section>
 
-    <section id="estimate" class="container reveal">
-      <div class="section-head">
-        <h2>Instant move estimator</h2>
-        <p>
-          Customers can play with the numbers and see a live total. Great for lead generation, expectation-setting, and making your competitors look a little... outdated.
-        </p>
-      </div>
+    <!-- FORM START -->
+    <form
+      id="estimateForm"
+      class="estimate-form"
+      action="https://formspree.io/f/YOUR_FORM_ID"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      <input type="hidden" name="_subject" value="New Movers4Hire Estimate Request" />
+      <input type="hidden" name="_gotcha" value="" />
+      <input type="hidden" id="formEstimateTotal" name="estimateTotal" />
+      <input type="hidden" id="formBreakdown" name="estimateBreakdown" />
+      <input type="hidden" id="formHourlyRate" name="hourlyRate" />
+      <input type="hidden" id="formCrewSummary" name="crewSummary" />
+      <input type="hidden" id="formPhotoCount" name="photoCount" />
 
-      <div class="estimator-wrap">
-        <div class="estimate-panel">
-          <h3>Customize the move</h3>
-          <p>Everything updates live. These sample rates are easy to tweak later to match your actual pricing.</p>
-
-          <div class="smart-guidance">
-            <div class="guide-card">
-              <strong>Not sure where to start?</strong>
-              <p>Smaller apartments usually need 2 movers. Larger homes often move faster and safer with 3 or 4.</p>
-            </div>
-            <div class="guide-card">
-              <strong>Want a better estimate?</strong>
-              <p>Have room count, rough mileage, specialty items, and packing status ready before filling this out.</p>
-            </div>
-          </div>
-
-            <!-- CUSTOMER INFO START -->
-<div class="form-grid">
-  <div class="field">
-    <div class="label-row">
-      <label for="customerName">Customer name</label>
-      <span class="help-pill">For the quote</span>
-    </div>
-    <input id="customerName" type="text" placeholder="Full name" />
-  </div>
-
-  <div class="field">
-    <div class="label-row">
-      <label for="customerEmail">Customer email</label>
-      <span class="help-pill">Optional</span>
-    </div>
-    <input id="customerEmail" type="email" placeholder="name@email.com" />
-  </div>
-
-  <div class="field">
-    <div class="label-row">
-      <label for="moveDate">Preferred move date</label>
-      <span class="help-pill">Scheduling</span>
-    </div>
-    <input id="moveDate" type="date" />
-  </div>
-
-  <div class="field">
-    <div class="label-row">
-      <label for="originAddress">Move origin</label>
-      <span class="help-pill">Starting point</span>
-    </div>
-    <input id="originAddress" type="text" placeholder="Current address or city" />
-  </div>
-
-  <div class="field">
-    <div class="label-row">
-      <label for="destinationAddress">Move destination</label>
-      <span class="help-pill">Ending point</span>
-    </div>
-    <input id="destinationAddress" type="text" placeholder="New address or city" />
-  </div>
-</div>
-<!-- CUSTOMER INFO END -->
-
-
-          <div class="form-grid">
-            <div class="field">
-              <div class="label-row">
-                <label for="moveSize">Move size</label>
-                <span class="help-pill">Helps set time range</span>
-              </div>
-              <select id="moveSize">
-                <option value="studio">Studio / Small 1 Bed</option>
-                <option value="onebed">1–2 Bedroom</option>
-                <option value="threebed">3 Bedroom</option>
-                <option value="fourbed">4+ Bedroom / Large Home</option>
-                <option value="office">Small Office / Commercial</option>
-              </select>
-              <div class="helper-text">Home size is one of the fastest ways to estimate labor hours and crew size.</div>
-            </div>
-
-            <div class="field">
-              <div class="label-row">
-                <label for="movers">Number of movers</label>
-                <span class="help-pill">Affects hourly rate</span>
-              </div>
-              <select id="movers">
-                <option value="2">2 movers</option>
-                <option value="3" selected>3 movers</option>
-                <option value="4">4 movers</option>
-              </select>
-              <div class="helper-text">More movers usually cost more per hour, but they can reduce total job time on larger moves.</div>
-            </div>
-
-            <div class="field">
-              <div class="label-row">
-                <label for="hours">Estimated labor hours</label>
-                <span class="help-pill">Minimums apply</span>
-              </div>
-              <input id="hours" type="number" min="2" max="24" step="0.5" value="4" />
-              <div class="helper-text">Hours depend on packing level, stairs, walk distance, elevators, and how organized the items are.</div>
-            </div>
-
-            <div class="field">
-              <div class="label-row">
-                <label for="miles">Mileage between locations</label>
-                <span class="help-pill">Route based</span>
-              </div>
-              <input id="miles" type="number" min="0" max="500" step="1" value="12" />
-              <div class="helper-text">Mileage matters for local and regional estimates and can help explain total truck-related cost.</div>
-            </div>
-
-            <div class="field">
-              <div class="label-row">
-                <label for="truckFee">Truck fee</label>
-                <span class="help-pill">Equipment + vehicle</span>
-              </div>
-              <input id="truckFee" type="number" min="0" max="1000" step="5" value="95" />
-              <div class="helper-text">This can cover use of the truck, pads, dollies, straps, and basic moving equipment.</div>
-            </div>
-
-            <div class="field">
-              <div class="label-row">
-                <label for="travelFee">Travel / dispatch fee</label>
-                <span class="help-pill">Crew travel time</span>
-              </div>
-              <input id="travelFee" type="number" min="0" max="500" step="5" value="45" />
-              <div class="helper-text">Some movers charge for travel to and from the job depending on service area and dispatch distance.</div>
-            </div>
-          </div>
-
-          <div class="toggle-group">
-            <div class="toggle-row">
-              <div>
-                <strong>Need packing help?</strong>
-                <div class="tiny">Adds packing labor + packing materials</div>
-              </div>
-              <input id="packingHelp" type="checkbox" />
-            </div>
-
-            <div class="toggle-row">
-              <div>
-                <strong>Heavy / specialty items?</strong>
-                <div class="tiny">For safes, pianos, oversized furniture, gym equipment</div>
-              </div>
-              <input id="specialty" type="checkbox" />
-            </div>
-          </div>
-
-          <div class="check-grid">
-            <label class="check-option">
-              <input class="addon" type="checkbox" value="35" data-name="Stairs fee" />
-              <span>Stairs fee</span>
-            </label>
-
-            <label class="check-option">
-              <input class="addon" type="checkbox" value="50" data-name="Long carry fee" />
-              <span>Long carry fee</span>
-            </label>
-
-            <label class="check-option">
-              <input class="addon" type="checkbox" value="65" data-name="Furniture assembly" />
-              <span>Furniture assembly</span>
-            </label>
-
-            <label class="check-option">
-              <input class="addon" type="checkbox" value="40" data-name="Appliance handling" />
-              <span>Appliance handling</span>
-            </label>
-
-            <label class="check-option">
-              <input class="addon" type="checkbox" value="25" data-name="Wardrobe boxes" />
-              <span>Wardrobe boxes</span>
-            </label>
-
-            <label class="check-option">
-              <input class="addon" type="checkbox" value="80" data-name="Last-minute booking" />
-              <span>Last-minute booking</span>
-            </label>
-          </div>
-
-          <div class="action-row">
-            <button class="btn btn-primary" id="recalculateBtn">Recalculate</button>
-            <button class="btn btn-secondary" id="resetBtn" type="button">Reset</button>
-          </div>
-
-          <p class="fee-note tiny">
-            Heads-up: this is an estimate UI for the website, not a legal final quote. You can later hook this to a form, photo upload flow, email capture, CRM, calendar availability, or booking request system.
+      <section id="estimate" class="container reveal">
+        <div class="section-head">
+          <h2>Instant move estimator</h2>
+          <p>
+            Customers can play with the numbers and see a live total. Great for lead generation, expectation-setting, and making your competitors look a little... outdated.
           </p>
         </div>
 
-        <aside class="summary-card">
-          <div class="badge">Live Estimate</div>
-          <h3>Your projected move total</h3>
-          <button id="downloadPdfBtn" class="btn-primary">  📄 Download Estimate PDF</button>
-          <p>Numbers refresh instantly as selections change. Fancy, useful, and very conversion-friendly.</p>
+        <div class="estimator-wrap">
+          <div class="estimate-panel">
+            <h3>Customize the move</h3>
+            <p>Everything updates live. These sample rates are easy to tweak later to match your actual pricing.</p>
 
-          <div class="price-total">
-            <span class="tiny">Estimated total</span>
-            <strong id="estimateTotal">$0</strong>
+            <div class="smart-guidance">
+              <div class="guide-card">
+                <strong>Not sure where to start?</strong>
+                <p>Smaller apartments usually need 2 movers. Larger homes often move faster and safer with 3 or 4.</p>
+              </div>
+              <div class="guide-card">
+                <strong>Want a better estimate?</strong>
+                <p>Have room count, rough mileage, specialty items, and packing status ready before filling this out.</p>
+              </div>
+            </div>
+
+            <!-- CUSTOMER INFO START -->
+            <div class="form-grid">
+              <div class="field">
+                <div class="label-row">
+                  <label for="customerName">Customer name</label>
+                  <span class="help-pill">For the quote</span>
+                </div>
+                <input id="customerName" name="customerName" type="text" placeholder="Full name" required />
+              </div>
+
+              <div class="field">
+                <div class="label-row">
+                  <label for="customerEmail">Customer email</label>
+                  <span class="help-pill">Required</span>
+                </div>
+                <input id="customerEmail" name="email" type="email" placeholder="name@email.com" required />
+              </div>
+
+              <div class="field">
+                <div class="label-row">
+                  <label for="customerPhone">Phone number</label>
+                  <span class="help-pill">Optional</span>
+                </div>
+                <input id="customerPhone" name="customerPhone" type="tel" placeholder="(541) 555-0199" />
+              </div>
+
+              <div class="field">
+                <div class="label-row">
+                  <label for="moveDate">Preferred move date</label>
+                  <span class="help-pill">Scheduling</span>
+                </div>
+                <input id="moveDate" name="moveDate" type="date" />
+              </div>
+
+              <div class="field">
+                <div class="label-row">
+                  <label for="originAddress">Move origin</label>
+                  <span class="help-pill">Starting point</span>
+                </div>
+                <input id="originAddress" name="originAddress" type="text" placeholder="Current address or city" />
+              </div>
+
+              <div class="field">
+                <div class="label-row">
+                  <label for="destinationAddress">Move destination</label>
+                  <span class="help-pill">Ending point</span>
+                </div>
+                <input id="destinationAddress" name="destinationAddress" type="text" placeholder="New address or city" />
+              </div>
+            </div>
+            <!-- CUSTOMER INFO END -->
+
+            <div class="form-grid">
+              <div class="field">
+                <div class="label-row">
+                  <label for="moveSize">Move size</label>
+                  <span class="help-pill">Helps set time range</span>
+                </div>
+                <select id="moveSize" name="moveSize">
+                  <option value="studio">Studio / Small 1 Bed</option>
+                  <option value="onebed">1–2 Bedroom</option>
+                  <option value="threebed">3 Bedroom</option>
+                  <option value="fourbed">4+ Bedroom / Large Home</option>
+                  <option value="office">Small Office / Commercial</option>
+                </select>
+                <div class="helper-text">Home size is one of the fastest ways to estimate labor hours and crew size.</div>
+              </div>
+
+              <div class="field">
+                <div class="label-row">
+                  <label for="movers">Number of movers</label>
+                  <span class="help-pill">Affects hourly rate</span>
+                </div>
+                <select id="movers" name="movers">
+                  <option value="2">2 movers</option>
+                  <option value="3" selected>3 movers</option>
+                  <option value="4">4 movers</option>
+                </select>
+                <div class="helper-text">More movers usually cost more per hour, but they can reduce total job time on larger moves.</div>
+              </div>
+
+              <div class="field">
+                <div class="label-row">
+                  <label for="hours">Estimated labor hours</label>
+                  <span class="help-pill">Minimums apply</span>
+                </div>
+                <input id="hours" name="hours" type="number" min="2" max="24" step="0.5" value="4" />
+                <div class="helper-text">Hours depend on packing level, stairs, walk distance, elevators, and how organized the items are.</div>
+              </div>
+
+              <div class="field">
+                <div class="label-row">
+                  <label for="miles">Mileage between locations</label>
+                  <span class="help-pill">Route based</span>
+                </div>
+                <input id="miles" name="miles" type="number" min="0" max="500" step="1" value="12" />
+                <div class="helper-text">Mileage matters for local and regional estimates and can help explain total truck-related cost.</div>
+              </div>
+
+              <div class="field">
+                <div class="label-row">
+                  <label for="truckFee">Truck fee</label>
+                  <span class="help-pill">Equipment + vehicle</span>
+                </div>
+                <input id="truckFee" name="truckFee" type="number" min="0" max="1000" step="5" value="95" />
+                <div class="helper-text">This can cover use of the truck, pads, dollies, straps, and basic moving equipment.</div>
+              </div>
+
+              <div class="field">
+                <div class="label-row">
+                  <label for="travelFee">Travel / dispatch fee</label>
+                  <span class="help-pill">Crew travel time</span>
+                </div>
+                <input id="travelFee" name="travelFee" type="number" min="0" max="500" step="5" value="45" />
+                <div class="helper-text">Some movers charge for travel to and from the job depending on service area and dispatch distance.</div>
+              </div>
+            </div>
+
+            <div class="toggle-group">
+              <label class="toggle-row">
+                <div>
+                  <strong>Need packing help?</strong>
+                  <div class="tiny">Adds packing labor + packing materials</div>
+                </div>
+                <input id="packingHelp" name="packingHelp" type="checkbox" value="yes" />
+              </label>
+
+              <label class="toggle-row">
+                <div>
+                  <strong>Heavy / specialty items?</strong>
+                  <div class="tiny">For safes, pianos, oversized furniture, gym equipment</div>
+                </div>
+                <input id="specialty" name="specialty" type="checkbox" value="yes" />
+              </label>
+            </div>
+
+            <div class="check-grid">
+              <label class="check-option">
+                <input class="addon" type="checkbox" name="addons" value="Stairs fee" data-name="Stairs fee" data-amount="35" />
+                <span>Stairs fee</span>
+              </label>
+
+              <label class="check-option">
+                <input class="addon" type="checkbox" name="addons" value="Long carry fee" data-name="Long carry fee" data-amount="50" />
+                <span>Long carry fee</span>
+              </label>
+
+              <label class="check-option">
+                <input class="addon" type="checkbox" name="addons" value="Furniture assembly" data-name="Furniture assembly" data-amount="65" />
+                <span>Furniture assembly</span>
+              </label>
+
+              <label class="check-option">
+                <input class="addon" type="checkbox" name="addons" value="Appliance handling" data-name="Appliance handling" data-amount="40" />
+                <span>Appliance handling</span>
+              </label>
+
+              <label class="check-option">
+                <input class="addon" type="checkbox" name="addons" value="Wardrobe boxes" data-name="Wardrobe boxes" data-amount="25" />
+                <span>Wardrobe boxes</span>
+              </label>
+
+              <label class="check-option">
+                <input class="addon" type="checkbox" name="addons" value="Last-minute booking" data-name="Last-minute booking" data-amount="80" />
+                <span>Last-minute booking</span>
+              </label>
+            </div>
+
+            <div class="field" style="margin-top: 1rem;">
+              <div class="label-row">
+                <label for="customerNotes">Notes for Movers4Hire</label>
+                <span class="help-pill">Optional</span>
+              </div>
+              <textarea
+                id="customerNotes"
+                name="customerNotes"
+                rows="5"
+                placeholder="Tell us about stairs, elevators, specialty items, parking, freight needs, or anything else helpful."
+                style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:var(--text); border-radius:14px; padding:0.95rem 1rem; font:inherit; outline:none;"
+              ></textarea>
+            </div>
+
+            <div class="action-row">
+              <button class="btn btn-primary" id="recalculateBtn" type="button">Recalculate</button>
+              <button class="btn btn-secondary" id="resetBtn" type="button">Reset</button>
+            </div>
+
+            <p class="fee-note tiny">
+              Heads-up: this is an estimate UI for the website, not a legal final quote. You can later hook this to a CRM, availability calendar, or automated follow-up system.
+            </p>
           </div>
 
-          <div class="pulse-line"><span></span></div>
+          <aside class="summary-card">
+            <div class="badge">Live Estimate</div>
+            <h3>Your projected move total</h3>
+            <button id="downloadPdfBtn" class="btn btn-primary" type="button">📄 Download Estimate PDF</button>
+            <p>Numbers refresh instantly as selections change. Fancy, useful, and very conversion-friendly.</p>
 
-          <div class="summary-breakdown" id="breakdown"></div>
+            <div class="price-total">
+              <span class="tiny">Estimated total</span>
+              <strong id="estimateTotal">$0</strong>
+            </div>
 
-          <div class="summary-row total-row" style="margin-top: 0.9rem;">
-            <span>Grand total</span>
-            <span id="grandTotalRow">$0</span>
+            <div class="pulse-line"><span></span></div>
+
+            <div class="summary-breakdown" id="breakdown"></div>
+
+            <div class="summary-row total-row" style="margin-top: 0.9rem;">
+              <span>Grand total</span>
+              <span id="grandTotalRow">$0</span>
+            </div>
+
+            <p class="mini-note tiny" id="timeEstimateText" style="margin-top: 1rem;"></p>
+
+            <div class="action-row" style="margin-top: 1rem;">
+              <button id="submitEstimateBtn" class="btn btn-primary" type="submit">Send Estimate Request</button>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- PHOTO UPLOAD START -->
+      <section id="photo-estimate" class="container reveal">
+        <div class="section-head">
+          <h2>Upload photos for a better estimate</h2>
+          <p>
+            Photos help Movers4Hire understand room fullness, visible boxes, bulky furniture,
+            specialty items, and overall move complexity. This helps produce a more informed estimate.
+          </p>
+        </div>
+
+        <div class="photo-upload-wrap">
+          <div class="photo-panel">
+            <div class="badge">Photo-Assisted Estimate</div>
+            <h3>Show us what you’re moving</h3>
+            <p>
+              Upload photos of rooms, packed boxes, garage areas, storage units, large furniture,
+              or specialty items. The more complete the photos, the better the estimate usually gets.
+            </p>
+
+            <div class="upload-dropzone" id="uploadDropzone">
+              <input
+                id="photoUpload"
+                name="photos"
+                class="photo-input"
+                type="file"
+                accept="image/*"
+                multiple
+              />
+              <div class="upload-dropzone-content">
+                <div class="upload-icon">📸</div>
+                <strong>Drag photos here or click to upload</strong>
+                <p class="tiny">
+                  Good examples: living room, bedrooms, garage, stairs, packed boxes, appliances,
+                  safes, pianos, and anything unusually large or fragile.
+                </p>
+              </div>
+            </div>
+
+            <div class="upload-help-grid">
+              <div class="guide-card">
+                <strong>Best photo tips</strong>
+                <p>Take wide shots of each room and separate close-ups of heavy or specialty items.</p>
+              </div>
+              <div class="guide-card">
+                <strong>Freight / weight-based moves</strong>
+                <p>Photos help with rough planning, but final weight-based pricing may still need inventory review.</p>
+              </div>
+            </div>
           </div>
 
-          <p class="mini-note tiny" id="timeEstimateText" style="margin-top: 1rem;"></p>
-        </aside>
-      </div>
-    </section>
+          <aside class="photo-summary-card">
+            <div class="badge">Upload Summary</div>
+            <h3>Your photo-assisted estimate status</h3>
+            <p>As photos are added, the site gives a better preliminary guidance level.</p>
+
+            <div class="summary-breakdown">
+              <div class="summary-row">
+                <span>Photos uploaded</span>
+                <span id="photoCount">0</span>
+              </div>
+              <div class="summary-row">
+                <span>Total file size</span>
+                <span id="photoSize">0 MB</span>
+              </div>
+              <div class="summary-row">
+                <span>Estimate confidence</span>
+                <span id="confidenceLevel">Basic</span>
+              </div>
+            </div>
+
+            <div class="summary-row total-row" style="margin-top: 0.9rem;">
+              <span>Guidance</span>
+              <span id="photoGuidance">Add room photos</span>
+            </div>
+
+            <p class="mini-note tiny" id="photoEstimateNote" style="margin-top: 1rem;">
+              Uploading photos does not create a final guaranteed quote, but it can help produce a more informed estimate.
+            </p>
+          </aside>
+        </div>
+
+        <div class="photo-preview-grid" id="photoPreviewGrid"></div>
+      </section>
+      <!-- PHOTO UPLOAD END -->
+    </form>
+    <!-- FORM END -->
 
     <section id="pricing" class="container reveal">
       <div class="section-head">
@@ -522,136 +645,50 @@
       </div>
     </section>
 
-<!--PHOTO UPLOAD START-->
-    <section id="photo-estimate" class="container reveal">
-  <div class="section-head">
-    <h2>Upload photos for a better estimate</h2>
-    <p>
-      Photos help Movers4Hire understand room fullness, visible boxes, bulky furniture,
-      specialty items, and overall move complexity. This helps produce a more informed estimate.
-    </p>
-  </div>
+    <section id="service-map" class="container reveal">
+      <div class="section-head">
+        <h2>Service area map</h2>
+        <p>
+          Movers4Hire is based in Eugene and serves surrounding Oregon areas. This section helps
+          customers quickly understand whether their move is likely in the normal service zone.
+        </p>
+      </div>
 
-  <div class="photo-upload-wrap">
-    <div class="photo-panel">
-      <div class="badge">Photo-Assisted Estimate</div>
-      <h3>Show us what you’re moving</h3>
-      <p>
-        Upload photos of rooms, packed boxes, garage areas, storage units, large furniture,
-        or specialty items. The more complete the photos, the better the estimate usually gets.
-      </p>
-
-      <div class="upload-dropzone" id="uploadDropzone">
-        <input
-          id="photoUpload"
-          class="photo-input"
-          type="file"
-          accept="image/*"
-          multiple
-        />
-        <div class="upload-dropzone-content">
-          <div class="upload-icon">📸</div>
-          <strong>Drag photos here or click to upload</strong>
-          <p class="tiny">
-            Good examples: living room, bedrooms, garage, stairs, packed boxes, appliances,
-            safes, pianos, and anything unusually large or fragile.
+      <div class="map-section-grid">
+        <div class="map-card">
+          <div class="badge">Service Area</div>
+          <h3>Based in Eugene, Oregon</h3>
+          <p>
+            Great for local moves, regional moves, and estimate requests that start in or near Eugene,
+            Springfield, and surrounding communities.
           </p>
+
+          <div class="contact-list">
+            <div class="contact-item">
+              <strong>Primary Service Area</strong>
+              Eugene, Springfield, Coburg, Junction City, Creswell
+            </div>
+            <div class="contact-item">
+              <strong>Nearby Coverage</strong>
+              Cottage Grove, Veneta, Harrisburg, Corvallis, Salem by request
+            </div>
+            <div class="contact-item">
+              <strong>Long Distance / Freight</strong>
+              Available by custom quote depending on route, inventory, and shipment type
+            </div>
+          </div>
+        </div>
+
+        <div class="map-card map-embed-card">
+          <iframe
+            title="Movers4Hire Service Area Map"
+            src="https://www.google.com/maps?q=Eugene,Oregon&z=10&output=embed"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
         </div>
       </div>
-
-      <div class="upload-help-grid">
-        <div class="guide-card">
-          <strong>Best photo tips</strong>
-          <p>Take wide shots of each room and separate close-ups of heavy or specialty items.</p>
-        </div>
-        <div class="guide-card">
-          <strong>Freight / weight-based moves</strong>
-          <p>Photos help with rough planning, but final weight-based pricing may still need inventory review.</p>
-        </div>
-      </div>
-    </div>
-
-    <aside class="photo-summary-card">
-      <div class="badge">Upload Summary</div>
-      <h3>Your photo-assisted estimate status</h3>
-      <p>As photos are added, the site gives a better preliminary guidance level.</p>
-
-      <div class="summary-breakdown">
-        <div class="summary-row">
-          <span>Photos uploaded</span>
-          <span id="photoCount">0</span>
-        </div>
-        <div class="summary-row">
-          <span>Total file size</span>
-          <span id="photoSize">0 MB</span>
-        </div>
-        <div class="summary-row">
-          <span>Estimate confidence</span>
-          <span id="confidenceLevel">Basic</span>
-        </div>
-      </div>
-
-      <div class="summary-row total-row" style="margin-top: 0.9rem;">
-        <span>Guidance</span>
-        <span id="photoGuidance">Add room photos</span>
-      </div>
-
-      <p class="mini-note tiny" id="photoEstimateNote" style="margin-top: 1rem;">
-        Uploading photos does not create a final guaranteed quote, but it can help produce a more informed estimate.
-      </p>
-    </aside>
-  </div>
-
-  <div class="photo-preview-grid" id="photoPreviewGrid"></div>
-</section>
-<!--PHOTO UPLOAD END-->
-
-<!--MAP AREA START-->
-<section id="service-map" class="container reveal">
-  <div class="section-head">
-    <h2>Service area map</h2>
-    <p>
-      Movers4Hire is based in Eugene and serves surrounding Oregon areas. This section helps
-      customers quickly understand whether their move is likely in the normal service zone.
-    </p>
-  </div>
-
-  <div class="map-section-grid">
-    <div class="map-card">
-      <div class="badge">Service Area</div>
-      <h3>Based in Eugene, Oregon</h3>
-      <p>
-        Great for local moves, regional moves, and estimate requests that start in or near Eugene,
-        Springfield, and surrounding communities.
-      </p>
-
-      <div class="contact-list">
-        <div class="contact-item">
-          <strong>Primary Service Area</strong>
-          Eugene, Springfield, Coburg, Junction City, Creswell
-        </div>
-        <div class="contact-item">
-          <strong>Nearby Coverage</strong>
-          Cottage Grove, Veneta, Harrisburg, Corvallis, Salem by request
-        </div>
-        <div class="contact-item">
-          <strong>Long Distance / Freight</strong>
-          Available by custom quote depending on route, inventory, and shipment type
-        </div>
-      </div>
-    </div>
-
-    <div class="map-card map-embed-card">
-      <iframe
-        title="Movers4Hire Service Area Map"
-        src="https://www.google.com/maps?q=Eugene,Oregon&z=10&output=embed"
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-      ></iframe>
-    </div>
-  </div>
-</section>
-<!--MAP-AREA-END-->
+    </section>
 
     <section id="contact" class="container reveal">
       <div class="contact-grid">
@@ -713,13 +750,8 @@
     </footer>
   </div>
 
-
-
-
-    <script src="js/main.js"></script>
-    <!--PDF CDN START-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
-    <!--PDF CDN END-->
+  <script src="js/main.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 </body>
 </html>

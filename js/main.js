@@ -146,7 +146,7 @@ function calculateEstimate() {
   );
 
   const breakdownItems = [
-    { label: `Labor (${adjustedHours} hrs @ ${currency(hourlyRate)}/hr)`, value: laborCost },
+    {label: `Labor (${adjustedHours} hrs • ${movers} mover${movers > 1 ? 's' : ''} @ ${currency(hourlyRate)}/hr)`, value: laborCost},
     { label: `Mileage (${miles} mi @ ${currency(pricingConfig.mileageRate)}/mi)`, value: mileageCost },
     { label: 'Truck fee', value: truckFee },
     { label: 'Travel / dispatch', value: travelFee }
