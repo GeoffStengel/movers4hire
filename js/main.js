@@ -93,7 +93,7 @@ function formatDisplayDate(dateValue) {
     day: 'numeric'
   });
 }
-
+//
 // ====================== ESTIMATOR ======================
 function getEstimatedHours(size, inputHours) {
   const min = pricingConfig.minimumHours[size] || 3;
