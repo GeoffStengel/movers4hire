@@ -129,9 +129,9 @@ function calculateEstimate() {
   const selectedAddons = (els.addons || [])
     .filter((addon) => addon.checked)
     .map((addon) => ({
-      name: addon.dataset.name,
-      amount: Number(addon.value)
-    }));
+    name: addon.dataset.name || addon.value,
+    amount: Number(addon.dataset.amount || 0)
+  }));
 
   const addonsTotal = selectedAddons.reduce((sum, item) => sum + item.amount, 0);
 
