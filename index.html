@@ -281,7 +281,7 @@
                   <label for="customerName">Customer name</label>
                   <span class="help-pill">For the quote</span>
                 </div>
-                <input id="customerName" name="customerName" type="text" placeholder="Full name" required />
+                <input id="customerName" name="customerName" type="text" required minlength="2" maxlength="25" placeholder="Full name" required />
               </div>
 
               <div class="field">
@@ -289,7 +289,7 @@
                   <label for="customerEmail">Customer email</label>
                   <span class="help-pill">Required</span>
                 </div>
-                <input id="customerEmail" name="email" type="email" placeholder="name@email.com" required />
+                <input id="customerEmail" name="email" type="email" maxlength="50" placeholder="name@email.com" required />
               </div>
 
               <div class="field">
@@ -297,7 +297,7 @@
                   <label for="customerPhone">Phone number</label>
                   <span class="help-pill">Optional</span>
                 </div>
-                <input id="customerPhone" name="customerPhone" type="tel" placeholder="(541) 555-0199" />
+                <input id="customerPhone" name="customerPhone" type="tel" maxlength="20" placeholder="(541) 555-0199" />
               </div>
 
               <div class="field">
@@ -313,7 +313,7 @@
                   <label for="originAddress">Move origin</label>
                   <span class="help-pill">Starting point</span>
                 </div>
-                <input id="originAddress" name="originAddress" type="text" placeholder="Current address or city" />
+                <input id="originAddress" name="originAddress" type="text" maxlength="120" placeholder="Current address or city" />
               </div>
 
               <div class="field">
@@ -321,7 +321,7 @@
                   <label for="destinationAddress">Move destination</label>
                   <span class="help-pill">Ending point</span>
                 </div>
-                <input id="destinationAddress" name="destinationAddress" type="text" placeholder="New address or city" />
+                <input id="destinationAddress" name="destinationAddress" type="text" maxlength="120" placeholder="New address or city" />
               </div>
             </div>
             <!-- CUSTOMER INFO END -->
@@ -451,6 +451,7 @@
                 id="customerNotes"
                 name="customerNotes"
                 rows="5"
+                maxlength="200"
                 placeholder="Tell us about stairs, elevators, specialty items, parking, freight needs, or anything else helpful."
                 style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:var(--text); border-radius:14px; padding:0.95rem 1rem; font:inherit; outline:none;"
               ></textarea>

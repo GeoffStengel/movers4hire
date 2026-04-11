@@ -43,6 +43,8 @@ const els = {
   mileageRateDisplay: document.getElementById('mileageRateDisplay'),
   timeEstimateText: document.getElementById('timeEstimateText'),
 
+  customerNotes: document.getElementById('customerNotes'),
+
   recalculateBtn: document.getElementById('recalculateBtn'),
   resetBtn: document.getElementById('resetBtn'),
   year: document.getElementById('year')
@@ -93,8 +95,8 @@ function formatDisplayDate(dateValue) {
     day: 'numeric'
   });
 }
-//
-// ====================== ESTIMATOR ======================
+
+// ====================== ESTIMATOR START ======================
 function getEstimatedHours(size, inputHours) {
   const min = pricingConfig.minimumHours[size] || 3;
   return Math.max(Number(inputHours) || min, min);
@@ -206,6 +208,7 @@ function resetEstimator() {
 
   calculateEstimate();
 }
+// ====================== ESTIMATOR END ======================
 
 // ====================== PHOTO UPLOAD HELPERS ======================
 function formatFileSize(bytes) {
@@ -382,7 +385,7 @@ function initScrollReveal() {
   revealEls.forEach((el) => observer.observe(el));
 }
 
-// ====================== HAMBURGER MENU ======================
+// ====================== HAMBURGER MENU START======================
 function initHamburger() {
   const hamburger = document.getElementById('hamburger');
   const mobileMenu = document.getElementById('mobileMenu');
@@ -415,8 +418,9 @@ function initHamburger() {
     }
   });
 }
+// ====================== HAMBURGER MENU END ======================
 
-// ====================== PDF GENERATION - BRANDED ======================
+// ====================== PDF GENERATION - BRANDED START ======================
 function generateEstimateId() {
   const datePart = new Date().toISOString().slice(0, 10).replace(/-/g, '');
   const randomPart = Math.floor(1000 + Math.random() * 9000);
@@ -463,6 +467,7 @@ function generatePDF() {
   const moveDate = formatDisplayDate(els.moveDate?.value);
   const originAddress = safeValue(els.originAddress?.value);
   const destinationAddress = safeValue(els.destinationAddress?.value);
+  const customerNotes = safeValue(els.customerNotes?.value, '');
 
   const moversText = `${els.movers?.value || '0'} movers`;
   const hoursText = `${els.hours?.value || '0'} hrs`;
@@ -587,6 +592,41 @@ function generatePDF() {
 
   y = Math.max(leftEndY, rightEndY) + 20;
 
+// ================= CUSTOMER NOTES START=================
+if (customerNotes) {
+  y = ensureSpace(80, y);
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(13);
+  doc.setTextColor(...brandBlue);
+  doc.text('Customer Notes', margin, y);
+
+  y += 6;
+
+  const wrappedNotes = doc.splitTextToSize(customerNotes, pageWidth - margin * 2 - 20);
+
+  doc.autoTable({
+    startY: y,
+    theme: 'grid',
+    body: [[wrappedNotes.join('\n')]],
+    styles: {
+      font: 'helvetica',
+      fontSize: 9,
+      cellPadding: 6,
+      textColor: darkText,
+      lineColor: [225, 230, 236],
+      lineWidth: 0.5
+    },
+    columnStyles: {
+      0: { cellWidth: pageWidth - margin * 2 }
+    },
+    margin: { left: margin, right: margin }
+  });
+
+  y = doc.lastAutoTable.finalY + 18;
+}
+  // ================= CUSTOMER NOTES end=================
+    
   // ================= COST BREAKDOWN =================
   y = ensureSpace(120, y);
 
@@ -621,7 +661,7 @@ function generatePDF() {
   y = doc.lastAutoTable.finalY + 18;
 
   // ================= TOTAL =================
-  y = ensureSpace(70, y);
+  y = ensureSpace(10, y);
 
   doc.setFillColor(248, 250, 252);
   doc.setDrawColor(...brandTeal);
@@ -645,6 +685,7 @@ function generatePDF() {
 
   doc.save(`Movers4Hire_Estimate_${estimateId}.pdf`);
 }
+// ====================== PDF GENERATION - BRANDED END ======================
 
 // ====================== INIT HELPERS ======================
 function initEstimator() {
@@ -716,6 +757,11 @@ function init() {
   initHamburger();
   initPdfButton();
 
+  if (els.moveDate) {
+    const today = new Date().toISOString().split('T')[0];
+    els.moveDate.min = today;
+  }    
+    
   calculateEstimate();
   renderPhotoSummary();
 }

@@ -171,7 +171,7 @@
     }
 
     .hero {
-      padding: 4.5rem 0 2.5rem;
+      padding: 2.5rem 0 2.5rem;
       min-height: 88vh;
       display: grid;
       align-items: center;
@@ -341,18 +341,26 @@
       background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
       overflow: hidden;
     }
-
+    
     .road::before {
       content: "";
       position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(90deg, transparent 0 22px, rgba(255,255,255,0.35) 22px 40px);
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent 0 22px,
+        rgba(255,255,255,0.35) 22px 40px
+      );
       animation: roadMove 1.4s linear infinite;
+      will-change: transform;
     }
 
     @keyframes roadMove {
       from { transform: translateX(0); }
-      to { transform: translateX(-62px); }
+      to { transform: translateX(-40px); }
     }
 
     .truck {
