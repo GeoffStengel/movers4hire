@@ -371,7 +371,7 @@ function handleFiles(fileList) {
   renderPhotoSummary();
 }
 
-// ====================== SCROLL REVEAL ======================
+// ====================== SCROLL REVEAL ====================== 
 function initScrollReveal() {
   const revealEls = document.querySelectorAll('.reveal');
   if (!revealEls.length) return;

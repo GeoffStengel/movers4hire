@@ -1307,6 +1307,50 @@
     }
 
 
+
+/* ================= SAFE MOBILE PERFORMANCE FIXES ================= */
+@media (max-width: 768px) {
+  
+  /* 1. Lighten heavy effects */
+  .nav,
+  .card,
+  .estimate-panel,
+  .summary-card,
+  .photo-panel,
+  .photo-summary-card,
+  .map-card,
+  .contact-card {
+    backdrop-filter: blur(10px) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  /* 2. Reduce animation load */
+  .reveal {
+    transition-duration: 450ms !important;
+  }
+
+  .pulse-line span,
+  .orbital-ring {
+    animation-play-state: paused !important;
+  }
+
+  /* 3. Simplify hero on mobile */
+  .hero-visual {
+    min-height: 420px !important;
+  }
+
+  .floating-card {
+    display: none !important;   /* remove floating cards on mobile */
+  }
+
+  /* 4. Make photo grid lighter */
+  .photo-preview-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.8rem;
+  }
+
+  /* 5. Disable truck animation completely (we already did this) */
+}    
      /* Optional: Make the truck still visible but static */
 /* ================= MOBILE: DISABLE ANIMATION ================= */
 @media (max-width: 700px) {
