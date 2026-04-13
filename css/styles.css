@@ -1255,7 +1255,7 @@
 
     @media (max-width: 700px) {
       .hero {
-        padding-top: 3.5rem;
+        padding-top: .5rem;
       }
 
       .nav-inner {
